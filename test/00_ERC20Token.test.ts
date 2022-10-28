@@ -66,9 +66,9 @@ describe("ERC20 Token tests on zkEVM", async () => {
 
         const mintTx = await erc20TokenContract
             .connect(ownerSigner)
-            .mintERC20(derivedNode[1].address, ethers.utils.parseEther("10"));
+            .mintERC20(derivedNode[3].address, ethers.utils.parseEther("10"));
         await mintTx.wait(1);
-        expect(await erc20TokenContract.balanceOf(derivedNode[1].address)).eq(ethers.utils.parseEther("10"));
+        expect(await erc20TokenContract.balanceOf(derivedNode[3].address)).eq(ethers.utils.parseEther("10"));
     });
 
     it("transfers to other address", async () => {
@@ -76,9 +76,9 @@ describe("ERC20 Token tests on zkEVM", async () => {
 
         const transferTx = await erc20TokenContract
             .connect(ownerSigner)
-            .transfer(derivedNode[2].address, ethers.utils.parseEther("1"));
+            .transfer(derivedNode[1].address, ethers.utils.parseEther("1"));
         await transferTx.wait(1);
-        expect(await erc20TokenContract.balanceOf(derivedNode[2].address)).eq(ethers.utils.parseEther("1"));
+        expect(await erc20TokenContract.balanceOf(derivedNode[1].address)).eq(ethers.utils.parseEther("1"));
     });
 
     it("doesn't allow to transfer if insufficient balance", async () => {
@@ -99,23 +99,23 @@ describe("ERC20 Token tests on zkEVM", async () => {
 
         const approveTx = await erc20TokenContract
             .connect(ownerSigner)
-            .approve(derivedNode[1].address, ethers.utils.parseEther("2"));
+            .approve(derivedNode[2].address, ethers.utils.parseEther("1"));
         await approveTx.wait(1);
 
-        expect(await erc20TokenContract.allowance(derivedNode[0].address, derivedNode[1].address)).eq(
-            ethers.utils.parseEther("2")
+        expect(await erc20TokenContract.allowance(derivedNode[0].address, derivedNode[2].address)).eq(
+            ethers.utils.parseEther("1")
         );
     });
 
     it("allows to transferFrom", async () => {
-        const aliceSigner = new ethers.Wallet(derivedNode[1].privateKey, zkEVM_provider);
+        const bobSigner = new ethers.Wallet(derivedNode[2].privateKey, zkEVM_provider);
 
         const transferTx = await erc20TokenContract
-            .connect(aliceSigner)
-            .transferFrom(derivedNode[0].address, derivedNode[1].address, 1000);
+            .connect(bobSigner)
+            .transferFrom(derivedNode[0].address, derivedNode[2].address, 1000);
         await transferTx.wait(1);
 
-        expect(await erc20TokenContract.balanceOf(derivedNode[2].address)).eq(ethers.utils.parseEther("1"));
+        expect(await erc20TokenContract.balanceOf(derivedNode[2].address)).eq(1000);
     });
 
     it("doesn't allow to transferFrom if insufficient allowance", async () => {

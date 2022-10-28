@@ -1,0 +1,43 @@
+{
+  "name": "erc1155-token-zkevm",
+  "version": "1.0.0",
+  "description": "simple ERC1155 Token smart contract for zkEVM",
+  "scripts": {
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "deploy:ERC20": "npx hardhat run --network zkEVM scripts/ERC20/deploy_ERC20Token.ts",
+    "deploy:ERC721": "npx hardhat run --network zkEVM scripts/ERC721/deploy_ERC721Token.ts",
+    "deploy:ERC1155": "npx hardhat run --network zkEVM scripts/ERC1155/deploy_ERC1155Token.ts",
+    "test": "hardhat test"
+  },
+  "author": "Gulam Rasul Shah",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
+    "@nomiclabs/hardhat-etherscan": "^2.1.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@typechain/ethers-v5": "^7.1.0",
+    "@typechain/hardhat": "^2.3.0",
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^16.9.6",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.4",
+    "hardhat": "^2.6.4",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.4.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.18",
+    "ts-node": "^10.2.1",
+    "typechain": "^5.1.2",
+    "typescript": "^4.4.3"
+  },
+  "lint-staged": {
+    "*.{ts,json,sol,md,yml}": "prettier --write"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "dotenv": "^16.0.2",
+    "prompt-sync": "^4.2.0"
+  }
+}

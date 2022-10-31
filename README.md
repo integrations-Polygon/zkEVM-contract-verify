@@ -35,6 +35,6 @@ npx hardhat compile
 ## USAGE
 Start the unit testing script by running this command
 ```javascript
-hardhat test
+npm run test
 ```
 While the testing is in process it will initially display all the balances in the 5 testing wallet addresses provided by the given mnemonics, if any of the wallet addresses has 0 ETH then the testing will be terminated and either you can fund the addresses with some ETH or you can contact us to fund for you.

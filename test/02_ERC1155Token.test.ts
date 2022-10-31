@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
-import { setupWallets, zkEVM_provider, ownerSigner, adminSigner } from "./utils/setupWallet";
+import { setupWallet, zkEVM_provider, ownerSigner, adminSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import { abi, bytecode } from "../artifacts/src/ERC1155Token.sol/TestTokenERC1155.json";
@@ -11,10 +11,10 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
     let erc1155TokenContract: any;
 
     // setup atleast 5 wallet addresses for testing
-    const derivedNode = await setupWallets();
+    const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n\nAUTOMATE UNIT TEST CASES FOR STANDARD ERC1155 TOKEN\n");
+        console.log("\nAUTOMATE UNIT TEST CASES FOR STANDARD ERC1155 TOKEN\n");
 
         // get the contract factory
         const erc1155TokenFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);

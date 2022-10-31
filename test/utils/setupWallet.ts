@@ -8,7 +8,7 @@ const zkEVM_RPC: any = process.env.ZKEVM_RPC_URL;
 let zkEVM_provider: any;
 let ownerSigner: Signer, adminSigner: Signer, userSigner: Signer, aliceSigner: Signer, bobSigner: Signer;
 
-const setupWallets = async () => {
+const setupWallet = async () => {
     try {
         let derivedNodeArray: any = [];
         // get zkEVM provider
@@ -29,4 +29,4 @@ const setupWallets = async () => {
     }
 };
 
-export { setupWallets, zkEVM_provider, ownerSigner, adminSigner, userSigner, aliceSigner, bobSigner };
+export { setupWallet, zkEVM_provider, ownerSigner, adminSigner, userSigner, aliceSigner, bobSigner };

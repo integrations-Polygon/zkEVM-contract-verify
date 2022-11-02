@@ -116,19 +116,19 @@ describe("ERC721 Token deployment & tests on zkEVM", async () => {
             when trying to burn token, basically transfer to 0x00 address
         */
 
-        // it("owner can burn token", async () => {
-        //     const burnTx = await erc721TokenContract.connect(ownerSigner).burn(1);
-        //     await burnTx.wait(1);
+        it("owner can burn token", async () => {
+            const burnTx = await erc721TokenContract.connect(ownerSigner).burn(1);
+            await burnTx.wait(1);
 
-        //     expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("10");
-        // });
+            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("10");
+        });
 
-        // it("admin can burn token", async () => {
-        //     const burnTx = await erc721TokenContract.connect(adminSigner).burn(2);
-        //     await burnTx.wait(1);
+        it("admin can burn token", async () => {
+            const burnTx = await erc721TokenContract.connect(adminSigner).burn(2);
+            await burnTx.wait(1);
 
-        //     expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("10");
-        // });
+            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("10");
+        });
 
         it("owner can transfer erc721 token", async () => {
             const transferTx = await erc721TokenContract
@@ -172,11 +172,11 @@ describe("ERC721 Token deployment & tests on zkEVM", async () => {
             when trying to transfer ownership to 0x00 address
         */
 
-        // it("owner can renounce ownership", async () => {
-        //     const renounceOwnershipTx = await erc721TokenContract.connect(adminSigner).renounceOwnership();
-        //     await renounceOwnershipTx.wait(1);
+        it("owner can renounce ownership", async () => {
+            const renounceOwnershipTx = await erc721TokenContract.connect(adminSigner).renounceOwnership();
+            await renounceOwnershipTx.wait(1);
 
-        //     expect(await erc721TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
-        // });
+            expect(await erc721TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
+        });
     });
 });

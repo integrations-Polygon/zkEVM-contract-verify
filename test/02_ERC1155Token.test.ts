@@ -107,21 +107,21 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             when passing more than one value in the array
         */
 
-        // it("owner can batch transfer tokens", async () => {
-        //     const safeBatchTransferFromTx = await erc1155TokenContract
-        //         .connect(ownerSigner)
-        //         .safeBatchTransferFrom(
-        //             derivedNode[0].address,
-        //             derivedNode[2].address,
-        //             [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        //             [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
-        //             "0x00"
-        //         );
-        //     await safeBatchTransferFromTx.wait(1);
+        it("owner can batch transfer tokens", async () => {
+            const safeBatchTransferFromTx = await erc1155TokenContract
+                .connect(ownerSigner)
+                .safeBatchTransferFrom(
+                    derivedNode[0].address,
+                    derivedNode[2].address,
+                    [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                    [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
+                    "0x00"
+                );
+            await safeBatchTransferFromTx.wait(1);
 
-        //     expect(await erc1155TokenContract.balanceOf(derivedNode[2].address, 2)).eq(1);
-        //     expect(await erc1155TokenContract.balanceOf(derivedNode[2].address, 11)).eq(50);
-        // });
+            expect(await erc1155TokenContract.balanceOf(derivedNode[2].address, 2)).eq(1);
+            expect(await erc1155TokenContract.balanceOf(derivedNode[2].address, 11)).eq(50);
+        });
 
         it("user can transfer token", async () => {
             const safeTransferFromTx = await erc1155TokenContract
@@ -145,21 +145,21 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             when passing more than one value in the array
         */
 
-        // it("user can batch transfer tokens", async () => {
-        //     const safeBatchTransferFromTx = await erc1155TokenContract
-        //         .connect(userSigner)
-        //         .safeBatchTransferFrom(
-        //             derivedNode[2].address,
-        //             derivedNode[3].address,
-        //             [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-        //             [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
-        //             "0x00"
-        //         );
-        //     await safeBatchTransferFromTx.wait(1);
+        it("user can batch transfer tokens", async () => {
+            const safeBatchTransferFromTx = await erc1155TokenContract
+                .connect(userSigner)
+                .safeBatchTransferFrom(
+                    derivedNode[2].address,
+                    derivedNode[3].address,
+                    [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                    [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
+                    "0x00"
+                );
+            await safeBatchTransferFromTx.wait(1);
 
-        //     expect(await erc1155TokenContract.balanceOf(derivedNode[3].address, 2)).eq(1);
-        //     expect(await erc1155TokenContract.balanceOf(derivedNode[3].address, 11)).eq(50);
-        // });
+            expect(await erc1155TokenContract.balanceOf(derivedNode[3].address, 2)).eq(1);
+            expect(await erc1155TokenContract.balanceOf(derivedNode[3].address, 11)).eq(50);
+        });
 
         it("owner can transfer the ownership to admin", async () => {
             const transferOwnershipTx = await erc1155TokenContract
@@ -175,11 +175,11 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             when trying to transfer ownership to 0x00 address
         */
 
-        // it("owner can renounce ownership", async () => {
-        //     const renounceOwnershipTx = await erc1155TokenContract.connect(adminSigner).renounceOwnership();
-        //     await renounceOwnershipTx.wait(1);
+        it("owner can renounce ownership", async () => {
+            const renounceOwnershipTx = await erc1155TokenContract.connect(adminSigner).renounceOwnership();
+            await renounceOwnershipTx.wait(1);
 
-        //     expect(await erc1155TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
-        // });
+            expect(await erc1155TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
+        });
     });
 });

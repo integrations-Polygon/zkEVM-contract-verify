@@ -34,7 +34,7 @@ const config: HardhatUserConfig = {
     },
     networks: {
         zkEVM: {
-            url: process.env.ZKEVM_RPC_URL,
+            url: 'https://public.zkevm-test.net:2083/',
             gasPrice: "auto",
             accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
         },

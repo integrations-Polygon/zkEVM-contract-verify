@@ -111,6 +111,11 @@ describe("ERC721 Token deployment & tests on zkEVM", async () => {
             expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("11");
         });
 
+        /*  
+            Error: (Awaiting internal transactions for reason)
+            when trying to burn token, basically transfer to 0x00 address
+        */
+
         // it("owner can burn token", async () => {
         //     const burnTx = await erc721TokenContract.connect(ownerSigner).burn(1);
         //     await burnTx.wait(1);
@@ -161,6 +166,11 @@ describe("ERC721 Token deployment & tests on zkEVM", async () => {
 
             expect(await erc721TokenContract.owner()).eq(derivedNode[1].address);
         });
+
+        /*  
+            Error: (Awaiting internal transactions for reason)
+            when trying to transfer ownership to 0x00 address
+        */
 
         // it("owner can renounce ownership", async () => {
         //     const renounceOwnershipTx = await erc721TokenContract.connect(adminSigner).renounceOwnership();

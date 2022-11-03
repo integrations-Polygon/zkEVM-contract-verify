@@ -40,7 +40,7 @@ describe("ERC721 Token deployment & tests on zkEVM", async () => {
         console.log("\n");
     });
 
-    describe("ERC721 Token Token functionalities tests", async () => {
+    describe("ERC721 Token functionalities tests", async () => {
         it("has correct token name", async () => {
             expect(await erc721TokenContract.name()).eq("Test ERC721 Token");
         });

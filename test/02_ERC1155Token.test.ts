@@ -40,7 +40,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
         console.log("\n");
     });
 
-    describe("ERC1155 Token Token functionalities tests", async () => {
+    describe("ERC1155 Token functionalities tests", async () => {
         it("has correct uri", async () => {
             expect(await erc1155TokenContract.uri(0)).eq("ipfs://some-random-hash/");
         });

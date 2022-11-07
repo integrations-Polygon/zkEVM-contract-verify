@@ -117,22 +117,17 @@ contract MultiSigWallet is ReentrancyGuard {
         emit RevokeConfirmation(msg.sender, _txIndex);
     }
 
-    function getOwners() external view onlyOwner returns (address[] memory) {
+    function getOwners() external view returns (address[] memory) {
         return owners;
     }
 
-    function getTransactionCount() external view onlyOwner returns (uint256) {
+    function getTransactionCount() external view returns (uint256) {
         return transactions.length;
     }
 
     function getTransaction(
         uint256 _txIndex
-    )
-        external
-        view
-        onlyOwner
-        returns (address to, uint256 value, bytes memory data, bool executed, uint256 numConfirmations)
-    {
+    ) external view returns (address to, uint256 value, bytes memory data, bool executed, uint256 numConfirmations) {
         Transaction storage transaction = transactions[_txIndex];
 
         return (
@@ -144,7 +139,7 @@ contract MultiSigWallet is ReentrancyGuard {
         );
     }
 
-    function getTransferData(address _recipient, uint256 _amount) external view onlyOwner returns (bytes memory) {
+    function getTransferData(address _recipient, uint256 _amount) external pure returns (bytes memory) {
         return abi.encodeWithSignature("transfer(address,uint256)", _recipient, _amount);
     }
 
@@ -152,29 +147,23 @@ contract MultiSigWallet is ReentrancyGuard {
         address _sender,
         address _recipient,
         uint256 _amount
-    ) external view onlyOwner returns (bytes memory) {
+    ) external pure returns (bytes memory) {
         return abi.encodeWithSignature("transferFrom(address,address,uint256)", _sender, _recipient, _amount);
     }
 
-    function getTransferOwnershipData(address _newOwner) external view onlyOwner returns (bytes memory) {
+    function getTransferOwnershipData(address _newOwner) external pure returns (bytes memory) {
         return abi.encodeWithSignature("transferOwnership(address)", _newOwner);
     }
 
-    function getApproveData(address _spender, uint256 _amount) external view onlyOwner returns (bytes memory) {
+    function getApproveData(address _spender, uint256 _amount) external pure returns (bytes memory) {
         return abi.encodeWithSignature("approve(address,uint256)", _spender, _amount);
     }
 
-    function getIncreaseAllowanceData(
-        address _spender,
-        uint256 _addedValue
-    ) external view onlyOwner returns (bytes memory) {
+    function getIncreaseAllowanceData(address _spender, uint256 _addedValue) external pure returns (bytes memory) {
         return abi.encodeWithSignature("increaseAllowance(address,uint256)", _spender, _addedValue);
     }
 
-    function getDecreaseAllowanceData(
-        address _spender,
-        uint256 _subtractedValue
-    ) external view onlyOwner returns (bytes memory) {
+    function getDecreaseAllowanceData(address _spender, uint256 _subtractedValue) external pure returns (bytes memory) {
         return abi.encodeWithSignature("decreaseAllowance(address,uint256)", _spender, _subtractedValue);
     }
 }

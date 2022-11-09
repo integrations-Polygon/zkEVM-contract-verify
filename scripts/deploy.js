@@ -3,7 +3,7 @@ const { upgrades, ethers } = require("hardhat");
 
 async function main() {
   
-  const Contract = await ethers.getContractFactory("ABItest");
+  const Contract = await ethers.getContractFactory("Fallback");
   const contract = await Contract.deploy();
 
   await contract.deployed();

@@ -2,13 +2,16 @@ import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner, userSigner, aliceSigner } from "./utils/setupWallet";
-import { ethers, Contract} from "ethers";
+import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/abi.sol/ABItest.json";
+import { abi, bytecode } from "../artifacts/src/fallback.sol/Fallback.json";
+import { abi2, bytecode2 } from "../artifacts/src/fallback.sol/SendToFallback.json";
+const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
+describe("Fallback contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed
     let abiContract: any;
+    let abiContract2: any;
 
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
@@ -17,7 +20,8 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
         // get the contract factory
         const contractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-    
+        const contractFactory2 = new ethers.ContractFactory(abi2, bytecode2, ownerSigner);
+
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
@@ -25,29 +29,42 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
         // deploy the contract
         const contract = await contractFactory.deploy();
+        const contract2 = await contractFactory2.deploy();
 
         // wait for the contract to get deployed
         await contract.deployed();
+        await sleep(5000); //5 second delay
+        await contract2.deployed();
 
         // get the instance of the deployed contract
         abiContract = new Contract(contract.address, abi, zkEVM_provider);
+        abiContract2 = new Contract(contract2.address, abi2, zkEVM_provider);
 
-        console.log("\nProxy contract deployed at: ", abiContract.address);
+        console.log("\nProxy contract deployed at: ", abiContract2.address);
         console.log(
-            `Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract.address}`
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract2.address}`
         );
         console.log("\n");
     });
 
     describe("ABI encode decode contract functionalities tests", async () => {
 
-        it("can encode", async () => {
+        it("can transfer to fallback", async () => {
 
-            expect(await abiContract.enc('Hello')).eq(process.env.BYTES);
+            const tx = await abiContract2
+                .connect(ownerSigner)
+                .transferToFallback(abiContract.address, { value: ethers.utils.parseEther("0.00001") });
+            await tx.wait()
+            expect(await abiContract.getBalance()).eq(ethers.utils.parseEther("0.00001"));
         });
 
-        it("can decode", async () => {
-            expect(await abiContract.dec(process.env.BYTES)).eq("Hello");
+        it("can call fallback", async () => {
+
+            const tx = await abiContract2
+                .connect(ownerSigner)
+                .callFallback(abiContract.address, { value: ethers.utils.parseEther("0.00001") });
+            await tx.wait()
+            expect(await abiContract.getBalance()).eq(ethers.utils.parseEther("0.00002"));
         });
 
     });

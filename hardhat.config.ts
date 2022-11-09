@@ -48,7 +48,7 @@ const config: HardhatUserConfig = {
         allowUncaught: true,
         fullTrace: true,
         diff: true,
-        timeout: "600s",
+        timeout: "60000s",
     },
     paths: {
         sources: "src",

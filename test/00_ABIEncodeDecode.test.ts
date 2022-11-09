@@ -25,8 +25,6 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC20 Token smart contract on zkEVM chain....");
-
         // deploy the contract
         const contract = await contractFactory.deploy();
         const contract2 = await contractFactory2.deploy();
@@ -47,7 +45,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
         console.log("\n");
     });
 
-    describe("ABI encode decode contract functionalities tests", async () => {
+    describe("interface contract functionalities tests", async () => {
 
         it("can increment value", async () => {
 

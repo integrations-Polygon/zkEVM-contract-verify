@@ -4,8 +4,8 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner, userSigner, aliceSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/fallback.sol/Fallback.json";
-import { abi2, bytecode2 } from "../artifacts/src/fallback.sol/SendToFallback.json";
+import { abi, bytecode } from "../artifacts/src/interface.sol/Counter.json";
+import { abi2, bytecode2 } from "../artifacts/src/interface.sol/MyContract.json";
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 describe("Fallback contract deployment & tests on zkEVM", async () => {
@@ -40,7 +40,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
         abiContract = new Contract(contract.address, abi, zkEVM_provider);
         abiContract2 = new Contract(contract2.address, abi2, zkEVM_provider);
 
-        console.log("\nProxy contract deployed at: ", abiContract2.address);
+        console.log("\ncontract deployed at: ", abiContract2.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract2.address}`
         );
@@ -49,22 +49,13 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
 
     describe("ABI encode decode contract functionalities tests", async () => {
 
-        it("can transfer to fallback", async () => {
+        it("can increment value", async () => {
 
             const tx = await abiContract2
                 .connect(ownerSigner)
-                .transferToFallback(abiContract.address, { value: ethers.utils.parseEther("0.00001") });
+                .incrementCounter(abiContract.address);
             await tx.wait()
-            expect(await abiContract.getBalance()).eq(ethers.utils.parseEther("0.00001"));
-        });
-
-        it("can call fallback", async () => {
-
-            const tx = await abiContract2
-                .connect(ownerSigner)
-                .callFallback(abiContract.address, { value: ethers.utils.parseEther("0.00001") });
-            await tx.wait()
-            expect(await abiContract.getBalance()).eq(ethers.utils.parseEther("0.00002"));
+            expect(await abiContract2.getCount(abiContract.address)).eq('1');
         });
 
     });

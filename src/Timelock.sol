@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-contract TimeLock {
+contract Timelock {
     error NotOwnerError();
     error AlreadyQueuedError(bytes32 txId);
     error TimestampNotInRangeError(uint blockTimestamp, uint timestamp);

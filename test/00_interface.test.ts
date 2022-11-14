@@ -26,8 +26,8 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
         await checkBalances(derivedNode);
 
         // deploy the contract
-        const contract = await counter_Factory.deploy();
-        const contract2 = await myContract_Factory.deploy();
+        const counter_contract = await counter_Factory.deploy();
+        const myContract_contract = await myContract_Factory.deploy();
 
         // wait for the contract to get deployed
         await contract.deployed();
@@ -35,8 +35,8 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
         await contract2.deployed();
 
         // get the instance of the deployed contract
-        counter = new Contract(contract.address, counter_artifacts.abi, zkEVM_provider);
-        myContract = new Contract(contract2.address, myContract_artifacts.abi, zkEVM_provider);
+        counter = new Contract(counter_contract.address, counter_artifacts.abi, zkEVM_provider);
+        myContract = new Contract(myContract_contract.address, myContract_artifacts.abi, zkEVM_provider);
 
         console.log("\ncontract deployed at: ", myContract.address);
         console.log(

@@ -12,6 +12,8 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
+    const BYTES = '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000548656c6c6f000000000000000000000000000000000000000000000000000000'
+    
     before(async () => {
         console.log("\nEncode Decode UNIT TEST CASES\n");
 
@@ -21,7 +23,7 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC20 Token smart contract on zkEVM chain....");
+        console.log("\nDeploying ABI encode decode smart contract on zkEVM chain....");
 
         // deploy the contract
         const contract = await contractFactory.deploy();
@@ -32,7 +34,7 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         abiContract = new Contract(contract.address, abi, zkEVM_provider);
 
-        console.log("\nProxy contract deployed at: ", abiContract.address);
+        console.log("\ncontract deployed at: ", abiContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract.address}`
         );
@@ -43,11 +45,11 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
         it("can encode", async () => {
 
-            expect(await abiContract.enc('Hello')).eq(process.env.BYTES);
+            expect(await abiContract.enc('Hello')).eq(BYTES);
         });
 
         it("can decode", async () => {
-            expect(await abiContract.dec(process.env.BYTES)).eq("Hello");
+            expect(await abiContract.dec(BYTES)).eq("Hello");
         });
 
     });

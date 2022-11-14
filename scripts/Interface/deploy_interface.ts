@@ -14,5 +14,4 @@ async function deploy() {
     console.log("\ncontract deployed at: ", interface_contract.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${interface_contract.address}`);
 }
-
 deploy();

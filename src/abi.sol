@@ -4,11 +4,21 @@ pragma solidity ^0.8.7;
 
 contract ABItest{
 
-    function enc(string memory str) external pure returns (bytes memory){
-        return abi.encode(str);
+    function enc(uint256 arg) external pure returns (bytes memory){
+        return abi.encode(arg);
     }
-    function dec(bytes calldata data) external pure returns (string memory str){
 
-        (str) =   abi.decode(data, (string));
+    function encWithSelector(uint256 arg) external pure returns(bytes memory){
+        return abi.encodeWithSelector(bytes4(keccak256("myfunction(uint256)")), arg);
     }
+
+    function encWithSignature(uint256 arg) external pure returns(bytes memory){
+        return abi.encodeWithSignature("myfunction(uint256)", arg);
+    }
+
+    function dec(bytes calldata data) external pure returns (uint256 arg){
+        arg = abi.decode(data, (uint256));
+    }
+
+
 }

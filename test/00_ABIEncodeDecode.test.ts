@@ -12,7 +12,8 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
-    const BYTES = '0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000548656c6c6f000000000000000000000000000000000000000000000000000000'
+    const BYTES = '0x0000000000000000000000000000000000000000000000000000000000000037'
+    const BYTES2 = '0x2140ed820000000000000000000000000000000000000000000000000000000000000037'
     
     before(async () => {
         console.log("\nEncode Decode UNIT TEST CASES\n");
@@ -45,11 +46,23 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
         it("can encode", async () => {
 
-            expect(await abiContract.enc('Hello')).eq(BYTES);
+            expect(await abiContract.enc('55')).eq(BYTES);
         });
 
         it("can decode", async () => {
-            expect(await abiContract.dec(BYTES)).eq("Hello");
+            expect(await abiContract.dec(BYTES)).eq('55');
+        });
+
+        it("can encode with selector", async () => {
+            expect(await abiContract.encWithSelector('55')).eq(BYTES2);
+        });
+
+        it("can encode with selector", async () => {
+            expect(await abiContract.encWithSignature('55')).eq(BYTES2);
+        });
+
+        it("can decode with selector", async () => {
+            expect(await abiContract.dec(BYTES)).eq('55');
         });
 
     });

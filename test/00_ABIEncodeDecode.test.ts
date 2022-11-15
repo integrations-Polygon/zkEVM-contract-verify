@@ -57,11 +57,15 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
             expect(await abiContract.encWithSelector('55')).eq(BYTES2);
         });
 
+        it("can decode with selector", async () => {
+            expect(await abiContract.dec(BYTES)).eq('55');
+        });
+
         it("can encode with signature", async () => {
             expect(await abiContract.encWithSignature('55')).eq(BYTES2);
         });
 
-        it("can decode with selector", async () => {
+        it("can decode with signature", async () => {
             expect(await abiContract.dec(BYTES)).eq('55');
         });
 

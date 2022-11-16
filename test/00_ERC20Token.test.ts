@@ -6,7 +6,7 @@ import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import { abi, bytecode } from "../artifacts/src/ERC20Token.sol/TestTokenERC20.json";
 
-describe("ERC20 Token deployment & tests on zkEVM", async () => {
+describe("ERC20 token deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed
     let erc20TokenContract: any;
 
@@ -22,7 +22,7 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC20 Token smart contract on zkEVM chain....");
+        console.log("\nDeploying ERC20 token smart contract on zkEVM chain....");
 
         // deploy the contract
         const erc20Token = await erc20TokenFactory.deploy();
@@ -33,29 +33,29 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         erc20TokenContract = new Contract(erc20Token.address, abi, zkEVM_provider);
 
-        console.log("\nERC20 Token contract deployed at: ", erc20TokenContract.address);
+        console.log("\nERC20 token contract deployed at: ", erc20TokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc20TokenContract.address}`
         );
         console.log("\n");
     });
 
-    describe("ERC20 Token functionalities tests", async () => {
-        it("has correct token name", async () => {
+    describe("ERC20 token functionalities tests", async () => {
+        it("...has correct token name", async () => {
             expect(await erc20TokenContract.name()).eq("ERC20 Test Token");
         });
 
-        it("has correct token symbol", async () => {
+        it("...has correct token symbol", async () => {
             expect(await erc20TokenContract.symbol()).eq("TT20");
         });
 
-        it("mints on deployment", async () => {
+        it("...should mint ERC20 tokens on deployment", async () => {
             expect(await erc20TokenContract.balanceOf(derivedNode[0].address)).eq(
                 ethers.utils.parseEther("1000000000")
             );
         });
 
-        it("can mint tokens", async () => {
+        it("...can mint ERC20 tokens", async () => {
             const mintTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .mintERC20(derivedNode[3].address, ethers.utils.parseEther("10"));
@@ -65,7 +65,7 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
             );
         });
 
-        it("transfers to other address", async () => {
+        it("...should allow owner to transfer ERC20 tokens to other address", async () => {
             const transferTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .transfer(derivedNode[1].address, ethers.utils.parseEther("1"));
@@ -75,7 +75,7 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
             );
         });
 
-        it("doesn't allow to transfer if insufficient balance", async () => {
+        it("...should not allow to transfer ERC20 tokens if insufficient balance", async () => {
             await expect(
                 erc20TokenContract
                     .connect(userSigner)
@@ -83,11 +83,11 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
             ).to.be.reverted;
         });
 
-        it("doesn't allow transferring to 0 address", async () => {
+        it("...should not allow transferring to 0 address", async () => {
             await expect(erc20TokenContract.transfer(ethers.constants.AddressZero, 100)).to.be.reverted;
         });
 
-        it("sets correct allowance", async () => {
+        it("...can sets correct allowance", async () => {
             const approveTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(derivedNode[2].address, ethers.utils.parseEther("1"));
@@ -98,7 +98,7 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
             );
         });
 
-        it("allows to transferFrom", async () => {
+        it("...should allows to transferFrom", async () => {
             const transferTx = await erc20TokenContract
                 .connect(userSigner)
                 .transferFrom(derivedNode[0].address, derivedNode[2].address, 1000);
@@ -107,7 +107,7 @@ describe("ERC20 Token deployment & tests on zkEVM", async () => {
             expect(await erc20TokenContract.balanceOf(derivedNode[2].address)).eq(1000);
         });
 
-        it("doesn't allow to transferFrom if insufficient allowance", async () => {
+        it("...should not allow to transferFrom if insufficient allowance", async () => {
             const tx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(derivedNode[3].address, ethers.utils.parseEther("1"));

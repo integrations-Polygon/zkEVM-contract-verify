@@ -6,7 +6,6 @@ import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import fallback_artifacts from "../artifacts/src/fallback.sol/Fallback.json";
 import sendToFallback_artifacts from "../artifacts/src/fallback.sol/SendToFallback.json";
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 describe("Fallback contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

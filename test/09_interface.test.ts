@@ -6,7 +6,6 @@ import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import counter_artifacts from "../artifacts/src/interface.sol/Counter.json";
 import myContract_artifacts from "../artifacts/src/interface.sol/MyContract.json";
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 describe("Interface contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

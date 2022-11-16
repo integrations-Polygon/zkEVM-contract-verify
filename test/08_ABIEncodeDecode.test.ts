@@ -2,7 +2,7 @@ import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner, userSigner, aliceSigner } from "./utils/setupWallet";
-import { ethers, Contract} from "ethers";
+import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import { abi, bytecode } from "../artifacts/src/abi.sol/ABItest.json";
 
@@ -12,15 +12,15 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
-    const BYTES = '0x0000000000000000000000000000000000000000000000000000000000000037'
-    const BYTES2 = '0x2140ed820000000000000000000000000000000000000000000000000000000000000037'
-    
+    const BYTES = "0x0000000000000000000000000000000000000000000000000000000000000037";
+    const BYTES2 = "0x2140ed820000000000000000000000000000000000000000000000000000000000000037";
+
     before(async () => {
         console.log("\nEncode Decode UNIT TEST CASES\n");
 
         // get the contract factory
         const contractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-    
+
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
@@ -43,31 +43,28 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
     });
 
     describe("ABI encode decode contract functionalities tests", async () => {
-
-        it("can encode", async () => {
-
-            expect(await abiContract.enc('55')).eq(BYTES);
+        it("...can encode", async () => {
+            expect(await abiContract.enc("55")).eq(BYTES);
         });
 
-        it("can decode", async () => {
-            expect(await abiContract.dec(BYTES)).eq('55');
+        it("...can decode", async () => {
+            expect(await abiContract.dec(BYTES)).eq("55");
         });
 
-        it("can encode with selector", async () => {
-            expect(await abiContract.encWithSelector('55')).eq(BYTES2);
+        it("...can encode with selector", async () => {
+            expect(await abiContract.encWithSelector("55")).eq(BYTES2);
         });
 
-        it("can decode with selector", async () => {
-            expect(await abiContract.dec(BYTES)).eq('55');
+        it("...can decode with selector", async () => {
+            expect(await abiContract.dec(BYTES)).eq("55");
         });
 
-        it("can encode with signature", async () => {
-            expect(await abiContract.encWithSignature('55')).eq(BYTES2);
+        it("...can encode with signature", async () => {
+            expect(await abiContract.encWithSignature("55")).eq(BYTES2);
         });
 
-        it("can decode with signature", async () => {
-            expect(await abiContract.dec(BYTES)).eq('55');
+        it("...can decode with signature", async () => {
+            expect(await abiContract.dec(BYTES)).eq("55");
         });
-
     });
 });

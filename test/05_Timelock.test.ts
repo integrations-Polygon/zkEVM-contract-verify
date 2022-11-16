@@ -1,14 +1,7 @@
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
-import {
-    setupWallet,
-    zkEVM_provider,
-    ownerSigner,
-    adminSigner,
-    userSigner,
-    bobSigner,
-} from "./utils/setupWallet";
+import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import timelock_artifacts from "../artifacts/src/Timelock.sol/Timelock.json";

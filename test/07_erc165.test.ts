@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers, Contract } from "ethers";
 import { abi, bytecode } from "../artifacts/src/ERC165.sol/TestERC165.json";
-import { setupWallets, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
+import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import dotenv from "dotenv";
 import { checkBalances } from "./utils/checkBalances";
 dotenv.config();
@@ -11,7 +11,7 @@ describe("ERC165 contract deployment & tests on zkEVM", async function () {
     let erc165Contract: any;
 
     // setup atleast 5 wallet addresses for testing
-    const derivedNode = await setupWallets();
+    const derivedNode = await setupWallet();
 
     before(async () => {
         console.log("\nAUTOMATE UNIT TEST CASES FOR ERC165\n");

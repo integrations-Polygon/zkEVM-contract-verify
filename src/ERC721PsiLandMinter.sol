@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity 0.8.7;
 import "./utils/AccessProtected.sol";
 import "erc721psi/contracts/ERC721Psi.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";

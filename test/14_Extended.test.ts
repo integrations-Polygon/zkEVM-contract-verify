@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
-import { setupWallet, zkEVM_provider, ownerSigner, userSigner, aliceSigner } from "./utils/setupWallet";
+import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/extended.sol/ModifiedAccessControl.json";
+import { abi, bytecode } from "../artifacts/src/extended_contracts/Extended.sol/ModifiedAccessControl.json";
 
 describe("Extended contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

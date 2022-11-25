@@ -4,8 +4,8 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import timelock_artifacts from "../artifacts/src/Timelock.sol/Timelock.json";
-import testTimelock_artifacts from "../artifacts/src/TestTimelock.sol/TestTimelock.json";
+import timelock_artifacts from "../artifacts/src/timelock_contracts/Timelock.sol/Timelock.json";
+import testTimelock_artifacts from "../artifacts/src/timelock_contracts/TestTimelock.sol/TestTimelock.json";
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 

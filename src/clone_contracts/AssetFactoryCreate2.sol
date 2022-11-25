@@ -2,7 +2,7 @@
 pragma solidity 0.8.7;
 
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import "../src/NFTAsset.sol";
+import "./NFTAsset.sol";
 
 // import "../Assets/NFT/NFTAssetProxy.sol";
 

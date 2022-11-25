@@ -4,8 +4,8 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import fallback_artifacts from "../artifacts/src/fallback.sol/Fallback.json";
-import sendToFallback_artifacts from "../artifacts/src/fallback.sol/SendToFallback.json";
+import fallback_artifacts from "../artifacts/src/fallback_contracts/fallback.sol/Fallback.json";
+import sendToFallback_artifacts from "../artifacts/src/fallback_contracts/fallback.sol/SendToFallback.json";
 
 describe("Fallback contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

@@ -4,7 +4,10 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner, adminSigner, userSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/ERC721PsiLandMinter.sol/ERC721PsiLandMinter.json";
+import {
+    abi,
+    bytecode,
+} from "../artifacts/src/erc_tokens_contracts/ERC721PsiLandMinter.sol/ERC721PsiLandMinter.json";
 
 describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

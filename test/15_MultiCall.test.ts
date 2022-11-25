@@ -4,9 +4,8 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import testMultiCall_artifacts from "../artifacts/src/multicall.sol/TestMultiCall.json";
-import MultiCall_artifacts from "../artifacts/src/multiCall.sol/MultiCall.json";
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+import testMultiCall_artifacts from "../artifacts/src/multicall_contracts/multicall.sol/TestMultiCall.json";
+import MultiCall_artifacts from "../artifacts/src/multicall_contracts/MultiCall.sol/MultiCall.json";
 
 describe("MultiCall contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

@@ -1,12 +1,11 @@
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
-import upgrades from "hardhat";
-import { setupWallet, zkEVM_provider, ownerSigner, userSigner, aliceSigner } from "./utils/setupWallet";
+import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import token_artifacts from "../artifacts/src/token.sol/MyToken.json";
-import stake_artifacts from "../artifacts/src/stake.sol/StakeToken.json";
+import token_artifacts from "../artifacts/src/staking_contracts/token.sol/MyToken.json";
+import stake_artifacts from "../artifacts/src/staking_contracts/stake.sol/StakeToken.json";
 
 describe("Staking contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

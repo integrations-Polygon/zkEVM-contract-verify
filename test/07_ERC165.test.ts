@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers, Contract } from "ethers";
-import { abi, bytecode } from "../artifacts/src/ERC165.sol/TestERC165.json";
+import { abi, bytecode } from "../artifacts/src/erc165_contracts/ERC165.sol/TestERC165.json";
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import dotenv from "dotenv";
 import { checkBalances } from "./utils/checkBalances";

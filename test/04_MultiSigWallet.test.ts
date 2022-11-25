@@ -11,8 +11,8 @@ import {
 } from "./utils/setupWallet";
 import { ethers, Contract, BigNumber } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import multiSig from "../artifacts/src/MultiSigWallet.sol/MultiSigWallet.json";
-import erc20 from "../artifacts/src/ERC20Token.sol/TestTokenERC20.json";
+import multiSig from "../artifacts/src/multisig_contracts/MultiSigWallet.sol/MultiSigWallet.json";
+import erc20 from "../artifacts/src/erc_tokens_contracts/ERC20Token.sol/TestTokenERC20.json";
 
 describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
     // declare an instance of the contracts to be deployed

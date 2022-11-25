@@ -4,9 +4,9 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import nftAsset_artifacts from "../artifacts/src/NFTAsset.sol/NFTAsset.json";
-import assetFactory_artifacts from "../artifacts/src/AssetFactoryCreate.sol/AssetFactoryCreate.json";
-import assetFactoryCreate2_artifacts from "../artifacts/src/AssetFactoryCreate2.sol/AssetFactoryCreate2.json";
+import nftAsset_artifacts from "../artifacts/src/clone_contracts/NFTAsset.sol/NFTAsset.json";
+import assetFactory_artifacts from "../artifacts/src/clone_contracts/AssetFactoryCreate.sol/AssetFactoryCreate.json";
+import assetFactoryCreate2_artifacts from "../artifacts/src/clone_contracts/AssetFactoryCreate2.sol/AssetFactoryCreate2.json";
 
 describe("Clone contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

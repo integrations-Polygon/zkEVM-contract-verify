@@ -4,7 +4,7 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner, adminSigner, userSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/ERC1155Token.sol/TestTokenERC1155.json";
+import { abi, bytecode } from "../artifacts/src/erc_tokens_contracts/ERC1155Token.sol/TestTokenERC1155.json";
 
 describe("ERC1155 Token deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

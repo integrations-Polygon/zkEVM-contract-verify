@@ -4,7 +4,7 @@ dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
-import { abi, bytecode } from "../artifacts/src/abi.sol/ABItest.json";
+import { abi, bytecode } from "../artifacts/src/abi_encode_decode_contracts/abi.sol/ABItest.json";
 
 describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

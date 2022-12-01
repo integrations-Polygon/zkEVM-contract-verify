@@ -16,7 +16,7 @@ contract ERC721Token is ERC721URIStorage, ERC721Enumerable, ERC721Burnable, Acce
     event WhitelistAdded(address indexed user);
     event WhitelistRemoved(address indexed user);
 
-    constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {}
+    constructor() ERC721("ERC721Token", "ERC721") {}
 
     /**
      * Mint + Issue NFT

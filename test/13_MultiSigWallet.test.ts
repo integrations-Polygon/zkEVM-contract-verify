@@ -39,10 +39,10 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
 
         // deploy the multisig wallet contract
         const multiSigWallet = await multiSigWalletContractFactory.deploy([
-            derivedNode[0].address,
-            derivedNode[1].address,
-            derivedNode[2].address,
-            derivedNode[3].address,
+            ownerSigner.getAddress(),
+            adminSigner.getAddress(),
+            userSigner.getAddress(),
+            aliceSigner.getAddress(),
         ]);
 
         // wait for the multisig wallet contract to get deployed
@@ -88,10 +88,10 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
 
     describe("MultiSig Wallet functionalities tests", async () => {
         it("...should pass check for correct owners", async () => {
-            expect(await multiSigWalletContract.isOwner(derivedNode[0].address)).to.be.true;
-            expect(await multiSigWalletContract.isOwner(derivedNode[1].address)).to.be.true;
-            expect(await multiSigWalletContract.isOwner(derivedNode[2].address)).to.be.true;
-            expect(await multiSigWalletContract.isOwner(derivedNode[3].address)).to.be.true;
+            expect(await multiSigWalletContract.isOwner(ownerSigner.getAddress())).to.be.true;
+            expect(await multiSigWalletContract.isOwner(adminSigner.getAddress())).to.be.true;
+            expect(await multiSigWalletContract.isOwner(userSigner.getAddress())).to.be.true;
+            expect(await multiSigWalletContract.isOwner(aliceSigner.getAddress())).to.be.true;
         });
 
         it("...should pass check for required number of confirmations 3", async () => {
@@ -99,7 +99,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         });
 
         it("...should pass check for owners can submit transaction", async () => {
-            const data = await multiSigWalletContract.getTransferData(derivedNode[1].address, 100);
+            const data = await multiSigWalletContract.getTransferData(adminSigner.getAddress(), 100);
 
             const submitTransactionTx = await multiSigWalletContract
                 .connect(ownerSigner)
@@ -111,7 +111,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         });
 
         it("...should not pass check for non-owners can submit transaction", async () => {
-            const data = await multiSigWalletContract.getTransferOwnershipData(derivedNode[4].address);
+            const data = await multiSigWalletContract.getTransferOwnershipData(bobSigner.getAddress());
 
             await expect(
                 multiSigWalletContract.connect(bobSigner).submitTransaction(erc20Contract.address, 0, data)
@@ -123,17 +123,17 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
                 .connect(ownerSigner)
                 .confirmTransaction(0);
             await ownerConfirmationTx.wait(1);
-            expect(await multiSigWalletContract.isConfirmed(0, derivedNode[0].address)).to.be.true;
+            expect(await multiSigWalletContract.isConfirmed(0, ownerSigner.getAddress())).to.be.true;
 
             const adminConfirmationTx = await multiSigWalletContract
                 .connect(adminSigner)
                 .confirmTransaction(0);
             await adminConfirmationTx.wait(1);
-            expect(await multiSigWalletContract.isConfirmed(0, derivedNode[1].address)).to.be.true;
+            expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).to.be.true;
 
             const userConfirmationTx = await multiSigWalletContract.connect(userSigner).confirmTransaction(0);
             await userConfirmationTx.wait(1);
-            expect(await multiSigWalletContract.isConfirmed(0, derivedNode[2].address)).to.be.true;
+            expect(await multiSigWalletContract.isConfirmed(0, userSigner.getAddress())).to.be.true;
 
             expect(await (await multiSigWalletContract.getTransaction(0)).numConfirmations).eq(
                 await multiSigWalletContract.numConfirmationsRequired()
@@ -156,12 +156,12 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
                 .connect(adminSigner)
                 .revokeConfirmation(0);
             await revokeConfirmationTx.wait(1);
-            expect(await multiSigWalletContract.isConfirmed(0, derivedNode[1].address)).eq(false);
+            expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(false);
 
             // REVERT REVOKE CONFIRMATION
             const confirmationTx = await multiSigWalletContract.connect(adminSigner).confirmTransaction(0);
             await confirmationTx.wait(1);
-            expect(await multiSigWalletContract.isConfirmed(0, derivedNode[1].address)).eq(true);
+            expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(true);
         });
 
         it("...should not pass check for non-owners can revoke confiramtion", async () => {

@@ -52,31 +52,31 @@ describe("ERC20 tokens deployment & tests on zkEVM", async () => {
         it("...can set an admin", async () => {
             const setAdminTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .setAdmin(derivedNode[1].address, "true");
+                .setAdmin(adminSigner.getAddress(), "true");
             await setAdminTx.wait(1);
-            expect(await erc721TokenContract.isAdmin(derivedNode[1].address)).eq(true);
+            expect(await erc721TokenContract.isAdmin(adminSigner.getAddress())).eq(true);
         });
 
         it("...should allow owner to mint ERC20 tokenss", async () => {
             const mintTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .issueToken(derivedNode[0].address, "some-random-hash-1");
+                .issueToken(ownerSigner.getAddress(), "some-random-hash-1");
             await mintTx.wait(1);
-            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("1");
+            expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("1");
         });
 
         it("...should allow admin to mint ERC20 tokenss", async () => {
             const mintTx = await erc721TokenContract
                 .connect(adminSigner)
-                .issueToken(derivedNode[1].address, "some-random-hash-2");
+                .issueToken(adminSigner.getAddress(), "some-random-hash-2");
             await mintTx.wait(1);
-            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("1");
+            expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("1");
         });
 
         it("...should allow owner to batch mint ERC20 tokenss", async () => {
             const batchMintTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .issueBatch(derivedNode[0].address, [
+                .issueBatch(ownerSigner.getAddress(), [
                     "some-random-hash-3",
                     "some-random-hash-4",
                     "some-random-hash-5",
@@ -89,13 +89,13 @@ describe("ERC20 tokens deployment & tests on zkEVM", async () => {
                     "some-random-hash-12",
                 ]);
             await batchMintTx.wait(1);
-            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("11");
+            expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("11");
         });
 
         it("...should allow admin to batch mint ERC20 tokenss", async () => {
             const batchMintTx = await erc721TokenContract
                 .connect(adminSigner)
-                .issueBatch(derivedNode[1].address, [
+                .issueBatch(adminSigner.getAddress(), [
                     "some-random-hash-13",
                     "some-random-hash-14",
                     "some-random-hash-15",
@@ -108,7 +108,7 @@ describe("ERC20 tokens deployment & tests on zkEVM", async () => {
                     "some-random-hash-22",
                 ]);
             await batchMintTx.wait(1);
-            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("11");
+            expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("11");
         });
 
         /*  
@@ -120,51 +120,51 @@ describe("ERC20 tokens deployment & tests on zkEVM", async () => {
             const burnTx = await erc721TokenContract.connect(ownerSigner).burn(1);
             await burnTx.wait(1);
 
-            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("10");
+            expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("10");
         });
 
         it("...should allow admin to burn ERC20 tokens", async () => {
             const burnTx = await erc721TokenContract.connect(adminSigner).burn(2);
             await burnTx.wait(1);
 
-            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("10");
+            expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("10");
         });
 
         it("...should allow owner to transfer ERC20 tokens", async () => {
             const transferTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .transferFrom(derivedNode[0].address, derivedNode[1].address, "3");
+                .transferFrom(ownerSigner.getAddress(), adminSigner.getAddress(), "3");
             await transferTx.wait(1);
 
-            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("10");
-            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("12");
+            expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("10");
+            expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("12");
         });
 
         it("...should allow admin to transfer ERC20 tokens", async () => {
             const approvalTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .setApprovalForAll(derivedNode[1].address, true);
+                .setApprovalForAll(adminSigner.getAddress(), true);
             await approvalTx.wait(1);
             expect(
-                await erc721TokenContract.isApprovedForAll(derivedNode[0].address, derivedNode[1].address)
+                await erc721TokenContract.isApprovedForAll(ownerSigner.getAddress(), adminSigner.getAddress())
             ).eq(true);
 
             const transferTx = await erc721TokenContract
                 .connect(adminSigner)
-                .transferFrom(derivedNode[0].address, derivedNode[1].address, 4);
+                .transferFrom(ownerSigner.getAddress(), adminSigner.getAddress(), 4);
             await transferTx.wait(1);
 
-            expect(await erc721TokenContract.balanceOf(derivedNode[0].address)).eq("9");
-            expect(await erc721TokenContract.balanceOf(derivedNode[1].address)).eq("13");
+            expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("9");
+            expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("13");
         });
 
         it("...should allow owner to transfer the ownership of the contract to admin", async () => {
             const transferOwnershipTx = await erc721TokenContract
                 .connect(ownerSigner)
-                .transferOwnership(derivedNode[1].address);
+                .transferOwnership(adminSigner.getAddress());
             await transferOwnershipTx.wait(1);
 
-            expect(await erc721TokenContract.owner()).eq(derivedNode[1].address);
+            expect(await erc721TokenContract.owner()).eq(adminSigner.getAddress());
         });
 
         /*  

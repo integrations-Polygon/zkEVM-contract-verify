@@ -50,7 +50,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         });
 
         it("...should mint ERC20 tokens on deployment", async () => {
-            expect(await erc20TokenContract.balanceOf(derivedNode[0].address)).eq(
+            expect(await erc20TokenContract.balanceOf(ownerSigner.getAddress())).eq(
                 ethers.utils.parseEther("1000000000")
             );
         });
@@ -58,9 +58,9 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         it("...can mint ERC20 tokens", async () => {
             const mintTx = await erc20TokenContract
                 .connect(ownerSigner)
-                .mintERC20(derivedNode[3].address, ethers.utils.parseEther("10"));
+                .mintERC20(aliceSigner.getAddress(), ethers.utils.parseEther("10"));
             await mintTx.wait(1);
-            expect(await erc20TokenContract.balanceOf(derivedNode[3].address)).eq(
+            expect(await erc20TokenContract.balanceOf(aliceSigner.getAddress())).eq(
                 ethers.utils.parseEther("10")
             );
         });
@@ -68,9 +68,9 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         it("...should allow owner to transfer ERC20 tokens to other address", async () => {
             const transferTx = await erc20TokenContract
                 .connect(ownerSigner)
-                .transfer(derivedNode[1].address, ethers.utils.parseEther("1"));
+                .transfer(adminSigner.getAddress(), ethers.utils.parseEther("1"));
             await transferTx.wait(1);
-            expect(await erc20TokenContract.balanceOf(derivedNode[1].address)).eq(
+            expect(await erc20TokenContract.balanceOf(adminSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
             );
         });
@@ -79,7 +79,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             await expect(
                 erc20TokenContract
                     .connect(userSigner)
-                    .transfer(derivedNode[3].address, ethers.utils.parseEther("1000"))
+                    .transfer(aliceSigner.getAddress(), ethers.utils.parseEther("1000"))
             ).to.be.reverted;
         });
 
@@ -90,10 +90,10 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         it("...can sets correct allowance", async () => {
             const approveTx = await erc20TokenContract
                 .connect(ownerSigner)
-                .approve(derivedNode[2].address, ethers.utils.parseEther("1"));
+                .approve(userSigner.getAddress(), ethers.utils.parseEther("1"));
             await approveTx.wait(1);
 
-            expect(await erc20TokenContract.allowance(derivedNode[0].address, derivedNode[2].address)).eq(
+            expect(await erc20TokenContract.allowance(ownerSigner.getAddress(), userSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
             );
         });
@@ -101,23 +101,23 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         it("...should allows to transferFrom", async () => {
             const transferTx = await erc20TokenContract
                 .connect(userSigner)
-                .transferFrom(derivedNode[0].address, derivedNode[2].address, 1000);
+                .transferFrom(ownerSigner.getAddress(), userSigner.getAddress(), 1000);
             await transferTx.wait(1);
 
-            expect(await erc20TokenContract.balanceOf(derivedNode[2].address)).eq(1000);
+            expect(await erc20TokenContract.balanceOf(userSigner.getAddress())).eq(1000);
         });
 
         it("...should not allow to transferFrom if insufficient allowance", async () => {
             const tx = await erc20TokenContract
                 .connect(ownerSigner)
-                .approve(derivedNode[3].address, ethers.utils.parseEther("1"));
+                .approve(aliceSigner.getAddress(), ethers.utils.parseEther("1"));
             await tx.wait(1);
             await expect(
                 erc20TokenContract
                     .connect(aliceSigner)
                     .transferFrom(
-                        derivedNode[0].address,
-                        derivedNode[3].address,
+                        ownerSigner.getAddress(),
+                        aliceSigner.getAddress(),
                         ethers.utils.parseEther("10000")
                     )
             ).to.be.reverted;

@@ -83,7 +83,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
 
     describe("Timelock smart contract functionality tests", async () => {
         it("...should have correct owner", async () => {
-            expect(await timelockContract.owner()).eq(derivedNode[0].address);
+            expect(await timelockContract.owner()).eq(ownerSigner.getAddress());
         });
 
         it("...should be able to queue a transaction under timelock", async () => {

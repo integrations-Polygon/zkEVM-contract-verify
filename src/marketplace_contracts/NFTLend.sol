@@ -1,24 +1,25 @@
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
+import "./ERC721Token.sol";
+import "../utils/AccessProtected.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { IERC721Receiver } from "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-import "./utils/AccessProtected.sol";
-import "./ERC721Token.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Lend is IERC721Receiver, ReentrancyGuard, AccessProtected {
     using Address for address;
     using SafeMath for uint256;
+    using SafeERC20 for IERC20;
     using Counters for Counters.Counter;
-    IERC20 public immutable erc721Token;
+    IERC20 public immutable myToken;
     ERC721 public immutable nftAddress;
     ERC721Token public immutable erc721Token;
-    using SafeERC20 for IERC20;
 
     Counters.Counter public _listingIds;
 
@@ -77,14 +78,14 @@ contract Lend is IERC721Receiver, ReentrancyGuard, AccessProtected {
         bool onLend
     );
 
-    constructor(address _erc721Token, address _nftAddress, address _treasuryAddress, address _nftGameToken) {
-        require(_erc721Token.isContract(), "_erc721Token must be a contract");
+    constructor(address _myToken, address _nftAddress, address _treasuryAddress, address _erc721Token) {
+        require(_myToken.isContract(), "_myToken must be a contract");
         require(_nftAddress.isContract(), "_nftAddress must be a contract");
-        require(_nftGameToken.isContract(), "_nftAddress must be a contract");
-        erc721Token = IERC20(_erc721Token);
+        require(_erc721Token.isContract(), "_erc721Token must be a contract");
+        myToken = IERC20(_myToken);
         nftAddress = ERC721(_nftAddress);
+        erc721Token = ERC721Token(_erc721Token);
         treasuryAddress = _treasuryAddress;
-        erc721Token = ERC721Token(_nftGameToken);
     }
 
     function transferWithTreasury(address _from, address _to, uint256 _amount) internal {

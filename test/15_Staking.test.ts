@@ -65,7 +65,7 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
         await approve.wait();
     });
 
-    describe("staking contract functionalities tests", async () => {
+    describe("Staking contract functionalities tests", async () => {
         it("can stake ", async () => {
             const stake = await stakeContract.connect(ownerSigner).stakeToken(ethers.utils.parseEther("100"));
             await stake.wait();
@@ -74,25 +74,25 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
             expect(await stakeContract.addressStaked(await ownerSigner.getAddress())).eq(true);
         });
 
-        it("can get token expiry ", async () => {
+        it("...can get token expiry ", async () => {
             const stake = await stakeContract.connect(ownerSigner).getTokenExpiry();
             const duration = await stakeContract.planDuration();
             expect(stake.toNumber()).eq(Number(timestamp) + Number(duration));
         });
 
-        it("can pause staking", async () => {
+        it("...can pause staking", async () => {
             const tx = await stakeContract.connect(ownerSigner).pause();
             await tx.wait();
             expect(await stakeContract.paused()).eq(true);
         });
 
-        it("can unpause staking", async () => {
+        it("...can unpause staking", async () => {
             const tx = await stakeContract.connect(ownerSigner).unpause();
             await tx.wait();
             expect(await stakeContract.paused()).eq(false);
         });
 
-        it("can claim reward", async () => {
+        it("...can claim reward", async () => {
             const tx = await stakeContract.connect(ownerSigner).claimReward();
             await tx.wait();
             expect(await stakeContract.isClaimReward(await ownerSigner.getAddress())).eq(true);

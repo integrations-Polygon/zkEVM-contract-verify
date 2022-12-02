@@ -52,7 +52,7 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
             expect(await erc721PsiTokenContract.symbol()).eq("BMT");
         });
 
-        it("...to set an admin", async () => {
+        it("...should allow owner to set an admin", async () => {
             const setAdminTx = await erc721PsiTokenContract
                 .connect(ownerSigner)
                 .setAdmin(adminSigner.getAddress(), "true");

@@ -34,14 +34,14 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
         console.log("\nextended token contract deployed at: ", extendedContract.address);
     });
 
-    describe("extended contract functionalities tests", async () => {
-        it("can read function", async () => {
+    describe("Extended contract functionalities tests", async () => {
+        it("...can read function", async () => {
             const role = await extendedContract.ROLE();
             const address = await ownerSigner.getAddress();
             expect(await extendedContract.hasRole(role, address)).eq(true);
         });
 
-        it("can override", async () => {
+        it("...can override", async () => {
             const role = await extendedContract.ROLE();
             const address = await ownerSigner.getAddress();
             const tx = await extendedContract.connect(ownerSigner).revokeRole(role, address);

@@ -7,6 +7,7 @@ import {
     ownerSigner,
     adminSigner,
     userSigner,
+    aliceSigner,
     bobSigner,
 } from "./utils/setupWallet";
 import { ethers, Contract, BigNumber } from "ethers";

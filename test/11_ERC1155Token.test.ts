@@ -1,7 +1,14 @@
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
-import { setupWallet, zkEVM_provider, ownerSigner, adminSigner, userSigner } from "./utils/setupWallet";
+import {
+    setupWallet,
+    zkEVM_provider,
+    ownerSigner,
+    adminSigner,
+    userSigner,
+    aliceSigner,
+} from "./utils/setupWallet";
 import { ethers, Contract } from "ethers";
 import { checkBalances } from "./utils/checkBalances";
 import { abi, bytecode } from "../artifacts/src/erc_tokens_contracts/ERC1155Token.sol/TestTokenERC1155.json";

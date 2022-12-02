@@ -76,13 +76,13 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
         console.log("\n");
     });
 
-    describe("clone create contract functionalities tests", async () => {
+    describe("Clone create contract functionalities tests", async () => {
         const orgId = "1";
         const collectionId = "NFT Clone";
         const nftName = "Test Clone";
         const nftSymbol = "TC";
 
-        it("can set nft contract", async () => {
+        it("...can set nft contract", async () => {
             const setService = await assetFactoryContract
                 .connect(ownerSigner)
                 .setNFTContract(nftAssetContract.address);
@@ -90,14 +90,14 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await assetFactoryContract.nftContract()).eq(nftAssetContract.address);
         });
 
-        it("can set service address", async () => {
+        it("...can set service address", async () => {
             const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
             const setService = await assetFactoryContract.connect(ownerSigner).setService(address);
             await setService.wait(1);
             expect(await assetFactoryContract.service()).eq(address);
         });
 
-        it("can clone nft contract", async () => {
+        it("...can clone nft contract", async () => {
             const cloneContract = await assetFactoryContract
                 .connect(ownerSigner)
                 .cloneNFTContract(orgId, collectionId, nftName, nftSymbol);
@@ -111,7 +111,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await instanceContract.name()).eq("Test Clone");
         });
 
-        it("can read to clone contract", async () => {
+        it("...can read to clone contract", async () => {
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate,
                 nftAsset_artifacts.abi,
@@ -120,7 +120,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await instanceContract.symbol()).eq("TC");
         });
 
-        it("can write to clone contract", async () => {
+        it("...can write to clone contract", async () => {
             const baseURI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/";
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate,
@@ -133,13 +133,13 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
         });
     });
 
-    describe("clone create2 contract functionalities tests", async () => {
+    describe("Clone create2 contract functionalities tests", async () => {
         const orgId = "1";
         const collectionId = "NFT Clone";
         const nftName = "Test Clone";
         const nftSymbol = "TC";
 
-        it("can set nft contract", async () => {
+        it("...can set nft contract", async () => {
             const setService = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .setNFTContract(nftAssetContract.address);
@@ -147,14 +147,14 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await assetFactoryContractCreate2.nftContract()).eq(nftAssetContract.address);
         });
 
-        it("can set service address", async () => {
+        it("...can set service address", async () => {
             const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
             const setService = await assetFactoryContractCreate2.connect(ownerSigner).setService(address);
             await setService.wait(1);
             expect(await assetFactoryContractCreate2.service()).eq(address);
         });
 
-        it("can clone nft contract", async () => {
+        it("...can clone nft contract", async () => {
             const cloneContract = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .cloneNFTContract(orgId, collectionId, nftName, nftSymbol);
@@ -168,7 +168,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await instanceContract.name()).eq("Test Clone");
         });
 
-        it("can read to clone contract", async () => {
+        it("...can read to clone contract", async () => {
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate2,
                 nftAsset_artifacts.abi,
@@ -177,7 +177,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             expect(await instanceContract.symbol()).eq("TC");
         });
 
-        it("can write to clone contract", async () => {
+        it("...can write to clone contract", async () => {
             const baseURI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/";
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate2,

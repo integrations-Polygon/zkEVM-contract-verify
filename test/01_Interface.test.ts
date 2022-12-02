@@ -49,7 +49,7 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
         console.log("\n");
     });
 
-    describe("interface contract functionalities tests", async () => {
+    describe("Interface contract functionalities tests", async () => {
         it("...can increment value", async () => {
             const tx = await myContract.connect(ownerSigner).incrementCounter(counter.address);
             await tx.wait(1);

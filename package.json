@@ -39,6 +39,7 @@
     "@openzeppelin/contracts": "^4.7.3",
     "@openzeppelin/contracts-upgradeable": "^4.7.3",
     "dotenv": "^16.0.2",
+    "erc721psi": "^0.7.0",
     "prompt-sync": "^4.2.0"
   }
 }

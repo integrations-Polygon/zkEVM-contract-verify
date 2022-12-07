@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "../utils/AccessProtected.sol";
+import "../../utils/AccessProtected.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
@@ -22,14 +22,11 @@ contract ERC721Token is ERC721URIStorage, ERC721Enumerable, ERC721Burnable, Acce
      * Mint + Issue NFT
      *
      * @param recipient - NFT will be issued to recipient
-     * @param hash - Artwork Metadata IPFS hash
+     * @param tokenHash - Artwork Metadata IPFS hash
      */
-    function issueToken(address recipient, uint256 tokenId, string memory hash) public onlyLend {
-        // _tokenIds.increment();
-        // uint256 newTokenId = _tokenIds.current();
+    function issueToken(address recipient, uint256 tokenId, string memory tokenHash) public onlyLend {
         _mint(recipient, tokenId);
-        _setTokenURI(tokenId, hash);
-        //return newTokenId;
+        _setTokenURI(tokenId, tokenHash);
     }
 
     /**
@@ -82,7 +79,7 @@ contract ERC721Token is ERC721URIStorage, ERC721Enumerable, ERC721Burnable, Acce
         address to,
         uint256 tokenId
     ) internal override(ERC721, ERC721Enumerable) {
-        require(whitelisted[to] || from == address(0) || to == address(0), "Game Token transfer isn't allowed");
+        require(whitelisted[to] || from == address(0) || to == address(0), "NFT transfer isn't allowed");
         super._beforeTokenTransfer(from, to, tokenId);
     }
 

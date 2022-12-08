@@ -60,7 +60,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
         console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying staking contract on zkEVM chain....");
+        console.log("\nDeploying NFTLend contract on zkEVM chain....");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -95,113 +95,143 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
         lendContract = new Contract(lend_contract.address, NFTLend_artifacts.abi, zkEVM_provider);
 
         console.log("\nERC20 token contract deployed at: ", tokenContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
+        );
         console.log("ERC721 token contract deployed at: ", nftContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${nftContract.address}`
+        );
         console.log("ERC721 token 2 contract deployed at: ", nftLendContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${nftLendContract.address}`
+        );
         console.log("NFTLend contract deployed at: ", lendContract.address);
-        console.log("\nSetting up the ideal scenario for NFTLend....\n");
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${lendContract.address}`
+        );
+        console.log("\n");
+    });
 
-        /* 
-            TRANSFER ERC20 TOKEN TO THE USERS
-        */
-        console.log("TRANSFERRING ERC20 TOKENS TO THE TEST USERS");
-        const transferToken_alice = await tokenContract
-            .connect(ownerSigner)
-            .transfer(aliceSigner.getAddress(), "10000");
-        await transferToken_alice.wait();
-        expect(await tokenContract.balanceOf(await aliceSigner.getAddress())).eq("10000");
+    describe("Setting up NFTLend smart contract", async () => {
+        it("...should be able to transfer some ERC20 tokens to alice", async () => {
+            const transferToken_alice = await tokenContract
+                .connect(ownerSigner)
+                .transfer(aliceSigner.getAddress(), "10000");
+            await transferToken_alice.wait();
+            expect(await tokenContract.balanceOf(await aliceSigner.getAddress())).eq("10000");
+        });
 
-        const transferToken_bob = await tokenContract
-            .connect(ownerSigner)
-            .transfer(bobSigner.getAddress(), "10000");
-        await transferToken_bob.wait();
-        expect(await tokenContract.balanceOf(await bobSigner.getAddress())).eq("10000");
+        it("...should be able to transfer some ERC20 tokens to bob", async () => {
+            const transferToken_bob = await tokenContract
+                .connect(ownerSigner)
+                .transfer(bobSigner.getAddress(), "10000");
+            await transferToken_bob.wait();
+            expect(await tokenContract.balanceOf(await bobSigner.getAddress())).eq("10000");
+        });
 
-        const transferToken_lendContract = await tokenContract
-            .connect(ownerSigner)
-            .transfer(lendContract.address, "10000");
-        await transferToken_lendContract.wait();
-        expect(await tokenContract.balanceOf(lendContract.address)).eq("10000");
+        it("...should be able to transfer some ERC20 tokens to NFTLend smart contract", async () => {
+            const transferToken_lendContract = await tokenContract
+                .connect(ownerSigner)
+                .transfer(lendContract.address, "10000");
+            await transferToken_lendContract.wait();
+            expect(await tokenContract.balanceOf(lendContract.address)).eq("10000");
+        });
 
-        /* 
-            WHITELIST ADDRESSES FOR ERC721 TOKEN
-        */
-        console.log("WHITE LISTING ADDRESSES ON NFT_1");
-        const whitelist_owner = await nftContract
-            .connect(ownerSigner)
-            .addToWhitelist(ownerSigner.getAddress());
-        await whitelist_owner.wait();
-        expect(await nftContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
+        it("...should be able to whitelist owner on ERC721 token smart contract", async () => {
+            const whitelist_owner = await nftContract
+                .connect(ownerSigner)
+                .addToWhitelist(ownerSigner.getAddress());
+            await whitelist_owner.wait();
+            expect(await nftContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
+        });
 
-        const whitelist_alice = await nftContract
-            .connect(ownerSigner)
-            .addToWhitelist(aliceSigner.getAddress());
-        await whitelist_alice.wait();
-        expect(await nftContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
+        it("...should be able to whitelist alice on ERC721 token smart contract", async () => {
+            const whitelist_alice = await nftContract
+                .connect(ownerSigner)
+                .addToWhitelist(aliceSigner.getAddress());
+            await whitelist_alice.wait();
+            expect(await nftContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
+        });
 
-        const whitelist_bob = await nftContract.connect(ownerSigner).addToWhitelist(bobSigner.getAddress());
-        await whitelist_bob.wait();
-        expect(await nftContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
+        it("...should be able to whitelist bob on ERC721 token smart contract", async () => {
+            const whitelist_bob = await nftContract
+                .connect(ownerSigner)
+                .addToWhitelist(bobSigner.getAddress());
+            await whitelist_bob.wait();
+            expect(await nftContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
+        });
 
-        const whitelist_lendContract = await nftContract
-            .connect(ownerSigner)
-            .addToWhitelist(lendContract.address);
-        await whitelist_lendContract.wait();
-        expect(await nftContract.checkWhitelist(lendContract.address)).eq(true);
+        it("...should be able to whitelist NFTLend smart contract on ERC721 token smart contract", async () => {
+            const whitelist_lendContract = await nftContract
+                .connect(ownerSigner)
+                .addToWhitelist(lendContract.address);
+            await whitelist_lendContract.wait();
+            expect(await nftContract.checkWhitelist(lendContract.address)).eq(true);
+        });
 
-        /* 
-            WHITELIST ADDRESSES FOR ERC721 TOKEN
-        */
-        console.log("WHITE LISTING ADDRESSES ON NFT_2");
-        const whitelist2_owner = await nftLendContract
-            .connect(ownerSigner)
-            .addToWhitelist(ownerSigner.getAddress());
-        await whitelist2_owner.wait();
-        expect(await nftLendContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
+        it("...should be able to whitelist owner on ERC721_lender token smart contract", async () => {
+            const whitelist_owner = await nftLendContract
+                .connect(ownerSigner)
+                .addToWhitelist(ownerSigner.getAddress());
+            await whitelist_owner.wait();
+            expect(await nftLendContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
+        });
 
-        const whitelist2_alice = await nftLendContract
-            .connect(ownerSigner)
-            .addToWhitelist(aliceSigner.getAddress());
-        await whitelist2_alice.wait();
-        expect(await nftLendContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
+        it("...should be able to whitelist alice on ERC721_lender token smart contract", async () => {
+            const whitelist_alice = await nftLendContract
+                .connect(ownerSigner)
+                .addToWhitelist(aliceSigner.getAddress());
+            await whitelist_alice.wait();
+            expect(await nftLendContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
+        });
 
-        const whitelist2_bob = await nftLendContract
-            .connect(ownerSigner)
-            .addToWhitelist(bobSigner.getAddress());
-        await whitelist2_bob.wait();
-        expect(await nftLendContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
+        it("...should be able to whitelist bob on ERC721_lender token smart contract", async () => {
+            const whitelist_bob = await nftLendContract
+                .connect(ownerSigner)
+                .addToWhitelist(bobSigner.getAddress());
+            await whitelist_bob.wait();
+            expect(await nftLendContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
+        });
 
-        const whitelist2_lendContract = await nftLendContract
-            .connect(ownerSigner)
-            .addToWhitelist(lendContract.address);
-        await whitelist2_lendContract.wait();
-        expect(await nftContract.checkWhitelist(lendContract.address)).eq(true);
+        it("...should be able to whitelist NFTLend smart contract on ERC721_lender token smart contract", async () => {
+            const whitelist_lendContract = await nftLendContract
+                .connect(ownerSigner)
+                .addToWhitelist(lendContract.address);
+            await whitelist_lendContract.wait();
+            expect(await nftLendContract.checkWhitelist(lendContract.address)).eq(true);
+        });
 
-        /* 
-            MINT ERC721 TOKEN TO RESPECTIVE USERS 
-        */
-        console.log("MINTING 3 NFT_1 TO ALICE TEST USER");
-        const issueToken_1 = await nftContract
-            .connect(ownerSigner)
-            .issueToken(aliceSigner.getAddress(), 1, `hash-01`);
-        await issueToken_1.wait();
-        expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
+        it("...should be able to mint ERC721 token with tokenID 1 to alice", async () => {
+            const issueToken_1 = await nftContract
+                .connect(ownerSigner)
+                .issueToken(aliceSigner.getAddress(), 1, `hash-01`);
+            await issueToken_1.wait();
+            expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
+        });
 
-        const issueToken_2 = await nftContract
-            .connect(ownerSigner)
-            .issueToken(aliceSigner.getAddress(), 2, `hash-02`);
-        await issueToken_2.wait();
-        expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
-        const issueToken_3 = await nftContract
-            .connect(ownerSigner)
-            .issueToken(aliceSigner.getAddress(), 3, `hash-03`);
-        await issueToken_3.wait();
-        expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
+        it("...should be able to mint ERC721 token with tokenID 2 to alice", async () => {
+            const issueToken_2 = await nftContract
+                .connect(ownerSigner)
+                .issueToken(aliceSigner.getAddress(), 2, `hash-02`);
+            await issueToken_2.wait();
+            expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
+        });
 
-        /*
-            SET LENDER ADDRESS
-        */
-        console.log("SETTING THE LENDER ADDRESS\n");
-        await nftLendContract.connect(ownerSigner).setLenderContractAddress(lendContract.address);
+        it("...should be able to mint ERC721 token with tokenID 3 to alice", async () => {
+            const issueToken_3 = await nftContract
+                .connect(ownerSigner)
+                .issueToken(aliceSigner.getAddress(), 3, `hash-03`);
+            await issueToken_3.wait();
+            expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
+        });
+
+        it("...should be able to set lender address on ERC721_lender token smart contract", async () => {
+            await nftLendContract.connect(ownerSigner).setLenderContractAddress(lendContract.address);
+            expect(await nftLendContract.connect(ownerSigner).getLenderContractAddress()).eq(
+                nftLendContract.address
+            );
+        });
     });
 
     describe("NFTLend contract functionalities tests", async () => {

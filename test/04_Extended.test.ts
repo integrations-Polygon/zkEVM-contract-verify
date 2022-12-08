@@ -31,7 +31,10 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         extendedContract = new Contract(extended_contract.address, abi, zkEVM_provider);
 
-        console.log("\nextended token contract deployed at: ", extendedContract.address);
+        console.log("\nExtended token contract deployed at: ", extendedContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${extendedContract.address}`
+        );
     });
 
     describe("Extended contract functionalities tests", async () => {

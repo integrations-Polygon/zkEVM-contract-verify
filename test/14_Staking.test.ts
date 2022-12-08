@@ -47,22 +47,31 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
         tokenContract = new Contract(token_contract.address, token_artifacts.abi, zkEVM_provider);
         stakeContract = new Contract(stake_contract.address, stake_artifacts.abi, zkEVM_provider);
 
-        console.log("\nerc20 token contract deployed at: ", tokenContract.address);
+        console.log("\nERC20 token contract deployed at: ", tokenContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
+        );
         console.log("staking contract deployed at: ", stakeContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${stakeContract.address}`
+        );
+        console.log("\n");
+    });
 
-        //transfer reward token to contract
-        console.log("transferring reward token to staking contract...");
-        const tx = await tokenContract
-            .connect(ownerSigner)
-            .transfer(stakeContract.address, ethers.utils.parseEther("100"));
-        await tx.wait();
+    describe("Setting up staking smart contract", async () => {
+        it("...should transfer reward tokens to staking smart contract", async () => {
+            const tx = await tokenContract
+                .connect(ownerSigner)
+                .transfer(stakeContract.address, ethers.utils.parseEther("100"));
+            await tx.wait();
+        });
 
-        //approval to stake token
-        console.log("token approving...\n");
-        const approve = await tokenContract
-            .connect(ownerSigner)
-            .approve(stakeContract.address, ethers.utils.parseEther("10000"));
-        await approve.wait();
+        it("...should approve token for staking smart contract", async () => {
+            const approve = await tokenContract
+                .connect(ownerSigner)
+                .approve(stakeContract.address, ethers.utils.parseEther("10000"));
+            await approve.wait();
+        });
     });
 
     describe("Staking contract functionalities tests", async () => {

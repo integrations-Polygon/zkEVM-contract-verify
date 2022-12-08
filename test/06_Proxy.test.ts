@@ -41,7 +41,13 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
         writeAsProxy = exampleContract.attach(proxyContract.address);
 
         console.log("\nImplementation contract deployed at: ", exampleContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${exampleContract.address}`
+        );
         console.log("Proxy contract deployed at: ", proxyContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${proxyContract.address}`
+        );
         console.log("\n");
     });
 

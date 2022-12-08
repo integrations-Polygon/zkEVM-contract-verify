@@ -67,11 +67,20 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             zkEVM_provider
         );
 
-        console.log("\nnft asset contract deployed at: ", nftAssetContract.address);
-        console.log("clone create asset factory contract deployed at: ", assetFactoryContract.address);
+        console.log("\nNFT asset contract deployed at: ", nftAssetContract.address);
         console.log(
-            "clone create2 asset factory contract deployed at: ",
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${nftAssetContract.address}`
+        );
+        console.log("Clone create asset factory contract deployed at: ", assetFactoryContract.address);
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${assetFactoryContract.address}`
+        );
+        console.log(
+            "Clone create2 asset factory contract deployed at: ",
             assetFactoryContractCreate2.address
+        );
+        console.log(
+            `Contract Details: https://explorer.public.zkevm-test.net/address/${assetFactoryContractCreate2.address}`
         );
         console.log("\n");
     });

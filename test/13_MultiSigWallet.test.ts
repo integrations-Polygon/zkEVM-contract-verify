@@ -69,22 +69,27 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc20Contract.address}`
         );
+        console.log("\n");
+    });
 
-        // setup
-        console.log("\nSetting up the ideal scenario for MultiSig Wallet....\n\n");
-        const transferOwnershipTx = await erc20Contract
-            .connect(ownerSigner)
-            .transferOwnership(multiSigWalletContract.address);
-        await transferOwnershipTx.wait(1);
-        expect(await erc20Contract.owner()).eq(multiSigWalletContract.address);
+    describe("Setting up multisig wallet smart contract", async () => {
+        it("...should allow to transfer ownership of ERC20 token smart contract to multisig wallet", async () => {
+            const transferOwnershipTx = await erc20Contract
+                .connect(ownerSigner)
+                .transferOwnership(multiSigWalletContract.address);
+            await transferOwnershipTx.wait(1);
+            expect(await erc20Contract.owner()).eq(multiSigWalletContract.address);
+        });
 
-        const transferTx = await erc20Contract
-            .connect(ownerSigner)
-            .transfer(multiSigWalletContract.address, BigNumber.from("1000000000"));
-        await transferTx.wait(1);
-        expect(await erc20Contract.balanceOf(multiSigWalletContract.address)).eq(
-            BigNumber.from("1000000000")
-        );
+        it("...should allow owner to transfer some ERC20 token to multisig wallet address", async () => {
+            const transferTx = await erc20Contract
+                .connect(ownerSigner)
+                .transfer(multiSigWalletContract.address, BigNumber.from("1000000000"));
+            await transferTx.wait(1);
+            expect(await erc20Contract.balanceOf(multiSigWalletContract.address)).eq(
+                BigNumber.from("1000000000")
+            );
+        });
     });
 
     describe("MultiSig Wallet functionalities tests", async () => {

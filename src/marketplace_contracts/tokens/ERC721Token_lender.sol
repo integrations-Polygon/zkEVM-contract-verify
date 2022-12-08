@@ -47,6 +47,10 @@ contract ERC721Token is ERC721URIStorage, ERC721Enumerable, ERC721Burnable, Acce
         lenderContractAddress = _lenderContractAddress;
     }
 
+    function getLenderContractAddress() external view returns (address) {
+        return lenderContractAddress;
+    }
+
     /**
      * Add contract addresses to the whitelist
      */

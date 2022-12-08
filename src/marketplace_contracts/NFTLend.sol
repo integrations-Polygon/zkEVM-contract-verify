@@ -90,8 +90,8 @@ contract Lend is IERC721Receiver, ReentrancyGuard, AccessProtected {
 
     function transferWithTreasury(address _from, address _to, uint256 _amount) internal {
         uint256 treasuryFee = _amount.mul(5).div(100);
-        erc721Token.safeTransferFrom(_from, treasuryAddress, treasuryFee);
-        erc721Token.safeTransferFrom(_from, _to, _amount.sub(treasuryFee));
+        myToken.safeTransferFrom(_from, treasuryAddress, treasuryFee);
+        myToken.safeTransferFrom(_from, _to, _amount.sub(treasuryFee));
     }
 
     function lendNft(

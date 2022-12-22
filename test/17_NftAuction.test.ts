@@ -17,7 +17,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR NFT AUCTION CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT AUCTION CONTRACT\n");
 
         /* 
             GET THE CONTRACT FACTORY
@@ -29,10 +29,11 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
         );
         const auction_Factory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
-
-        console.log("\nDeploying NFTAuction contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTAuction smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -53,15 +54,16 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
         nftContract = new Contract(nft_contract.address, ERC721Token_artifacts.abi, zkEVM_provider);
         auctionContract = new Contract(auction_contract.address, abi, zkEVM_provider);
 
-        console.log("ERC721 token contract deployed at: ", nftContract.address);
+        console.log("ERC721 token Contract Deployed at: ", nftContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftContract.address}`
         );
-        console.log("NFTAuction contract deployed at: ", auctionContract.address);
+        console.log("\n");
+        console.log("NFTAuction Contract Deployed at: ", auctionContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${auctionContract.address}`
         );
-        console.log("\n");
+        console.log("\n\n");
     });
     describe("Setting up NFTAuction smart contract", async () => {
         it("...should be able to mint ERC721 NFT with tokenID 1 to seller or owner", async () => {
@@ -86,7 +88,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
             const whitelist_lendContract = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(auctionContract.address);
-            await whitelist_lendContract.wait();
+            await whitelist_lendContract.wait(1);
             expect(await nftContract.checkWhitelist(auctionContract.address)).eq(true);
         });
 
@@ -94,7 +96,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
             const whitelist_lendContract = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(await aliceSigner.getAddress());
-            await whitelist_lendContract.wait();
+            await whitelist_lendContract.wait(1);
             expect(await nftContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
         });
 
@@ -102,7 +104,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
             const whitelist_lendContract = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(await bobSigner.getAddress());
-            await whitelist_lendContract.wait();
+            await whitelist_lendContract.wait(1);
             expect(await nftContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
         });
     });
@@ -123,7 +125,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
         });
 
         it("...should allow seller to start the auction", async () => {
-            const response = await auctionContract.connect(ownerSigner).start(60);
+            const response = await auctionContract.connect(ownerSigner).start(50);
             await response.wait(1);
             expect(await nftContract.ownerOf(1)).eq(auctionContract.address);
             expect(await auctionContract.getStarted()).eq(true);
@@ -156,13 +158,13 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
             const response = await auctionContract
                 .connect(bobSigner)
                 .bid({ value: ethers.utils.parseEther("0.0003") });
-            await response.wait(1);
+            await response.wait(2);
             expect(await auctionContract.getHighestBidder()).eq(await bobSigner.getAddress());
             expect(await auctionContract.getHighestBid()).eq(ethers.utils.parseEther("0.0003"));
         });
 
         it("...should allow seller to end an auction after the auction expiry time has passed", async () => {
-            await sleep(30000);
+            await sleep(60000);
             const response = await auctionContract.connect(ownerSigner).end();
             await response.wait(1);
             expect(await nftContract.ownerOf(1)).eq(await bobSigner.getAddress());

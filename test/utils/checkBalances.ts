@@ -15,7 +15,7 @@ const getBalances = async (derivedNode) => {
         for (let i = 0; i < 5; i++) {
             balance[i] = await zkEVM_provider.getBalance(derivedNode[i].address);
             const balanceInEth = ethers.utils.formatEther(balance[i]);
-            console.log(`Balance in the address ${derivedNode[i].address} is ${balanceInEth} ETH`);
+            // console.log(`Balance in the address ${derivedNode[i].address} is ${balanceInEth} ETH`);
         }
     } catch (error) {
         console.log("\nError while getting balance: ", error);

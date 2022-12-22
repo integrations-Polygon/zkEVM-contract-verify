@@ -23,7 +23,12 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR MULTISIG WALLET\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying MultiSig Wallet smart contract and erc20 token on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const multiSigWalletContractFactory = new ethers.ContractFactory(
@@ -32,13 +37,6 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             ownerSigner
         );
         const erc20ContractFactory = new ethers.ContractFactory(erc20.abi, erc20.bytecode, ownerSigner);
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying MultiSig Wallet smart contract and erc20 token on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the multisig wallet contract
         const multiSigWallet = await multiSigWalletContractFactory.deploy([
@@ -63,7 +61,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         // get the instance of the deployed sample erc20 token contract
         erc20Contract = new Contract(erc20Token.address, erc20.abi, zkEVM_provider);
 
-        console.log("MultiSig Wallet Contract Deployed at: ", multiSigWalletContract.address);
+        console.log("\nMultiSig Wallet Contract Deployed at: ", multiSigWalletContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${multiSigWalletContract.address}`
         );

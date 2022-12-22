@@ -20,7 +20,12 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        //console.log("\nAUTOMATE UNIT TEST CASES FOR CLONE CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Clone smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const nftAsset_Factory = new ethers.ContractFactory(
@@ -38,13 +43,6 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             assetFactoryCreate2_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying Clone smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const nftAsset_contract = await nftAsset_Factory.deploy();
@@ -69,7 +67,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             zkEVM_provider
         );
 
-        console.log("NFT asset Contract Deployed at: ", nftAssetContract.address);
+        console.log("\nNFT asset Contract Deployed at: ", nftAssetContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftAssetContract.address}`
         );

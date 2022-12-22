@@ -14,17 +14,15 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR EXTENDED CONTRACT\n");
-
-        // get the contract factory
-        const extended_Factory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
         console.log("\n-----------------------------------------------------------------------------");
         console.log("Deploying Extended smart contract on zkEVM chain....");
         console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
+
+        // get the contract factory
+        const extended_Factory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
         // deploy the contract
         const extended_contract = await extended_Factory.deploy();
@@ -33,7 +31,7 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         extendedContract = new Contract(extended_contract.address, abi, zkEVM_provider);
 
-        console.log("Extended token Contract Deployed at: ", extendedContract.address);
+        console.log("\nExtended token Contract Deployed at: ", extendedContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${extendedContract.address}`
         );

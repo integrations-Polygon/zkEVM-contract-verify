@@ -17,7 +17,14 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT AUCTION CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTAuction smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        /* 
+            check & display current balances
+        */
+        await checkBalances(derivedNode);
 
         /* 
             GET THE CONTRACT FACTORY
@@ -28,12 +35,6 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
         const auction_Factory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying NFTAuction smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -54,7 +55,7 @@ describe("NFTAuction contract deployment & tests on zkEVM", async () => {
         nftContract = new Contract(nft_contract.address, ERC721Token_artifacts.abi, zkEVM_provider);
         auctionContract = new Contract(auction_contract.address, abi, zkEVM_provider);
 
-        console.log("ERC721 token Contract Deployed at: ", nftContract.address);
+        console.log("\nERC721 token Contract Deployed at: ", nftContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftContract.address}`
         );

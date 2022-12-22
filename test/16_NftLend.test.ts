@@ -28,7 +28,14 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT LENDING CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTLend smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        /* 
+            check & display current balances
+        */
+        await checkBalances(derivedNode);
 
         /* 
             GET THE CONTRACT FACTORY
@@ -56,13 +63,6 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             NFTLend_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying NFTLend smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -96,7 +96,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
         );
         lendContract = new Contract(lend_contract.address, NFTLend_artifacts.abi, zkEVM_provider);
 
-        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
+        console.log("\nERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );

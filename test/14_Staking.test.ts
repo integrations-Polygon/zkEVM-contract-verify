@@ -18,7 +18,12 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR STAKING CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Staking smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const token_Factory = new ethers.ContractFactory(
@@ -32,12 +37,6 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying Staking smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
-
         // deploy the contract
         const token_contract = await token_Factory.deploy();
         await token_contract.deployed();
@@ -49,7 +48,7 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
         tokenContract = new Contract(token_contract.address, token_artifacts.abi, zkEVM_provider);
         stakeContract = new Contract(stake_contract.address, stake_artifacts.abi, zkEVM_provider);
 
-        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
+        console.log("\nERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );

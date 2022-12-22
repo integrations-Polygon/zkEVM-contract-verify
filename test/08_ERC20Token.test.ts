@@ -21,17 +21,15 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR STANDARD ERC20 TOKEN\n");
-
-        // get the contract factory
-        const erc20TokenFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
         console.log("\n-----------------------------------------------------------------------------");
         console.log("Deploying ERC20 token smart contract on zkEVM chain....");
         console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
+
+        // get the contract factory
+        const erc20TokenFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
         // deploy the contract
         const erc20Token = await erc20TokenFactory.deploy();
@@ -42,7 +40,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         erc20TokenContract = new Contract(erc20Token.address, abi, zkEVM_provider);
 
-        console.log("ERC20 token Contract Deployed at: ", erc20TokenContract.address);
+        console.log("\nERC20 token Contract Deployed at: ", erc20TokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc20TokenContract.address}`
         );

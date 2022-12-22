@@ -17,7 +17,12 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR TIMELOCK CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Timelock smart contract and testTimelock contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const timelockContractFactory = new ethers.ContractFactory(
@@ -30,13 +35,6 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             testTimelock_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying Timelock smart contract and testTimelock contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the Timelock contract
         const timelock = await timelockContractFactory.deploy();
@@ -56,7 +54,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed TestTimelock contract
         testTimelockContract = new Contract(testTimelock.address, testTimelock_artifacts.abi, zkEVM_provider);
 
-        console.log("Timelock Contract Deployed at: ", timelockContract.address);
+        console.log("\nTimelock Contract Deployed at: ", timelockContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${timelockContract.address}`
         );

@@ -28,7 +28,14 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT SALE MARKETPLACE CONTRACT\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTSale smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        /*
+            check & display current balances
+        */
+        await checkBalances(derivedNode);
 
         /* 
             GET THE CONTRACT FACTORY
@@ -50,13 +57,6 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             NFTSale_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying NFTSale smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -81,7 +81,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
         nftContract = new Contract(nft_contract.address, ERC721Token_artifacts.abi, zkEVM_provider);
         saleContract = new Contract(sale_contract.address, NFTSale_artifacts.abi, zkEVM_provider);
 
-        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
+        console.log("\nERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );

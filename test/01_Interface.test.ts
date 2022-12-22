@@ -15,7 +15,12 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        // console.log("\nINTERFACE UNIT TEST CASES\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Fallback smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const counter_Factory = new ethers.ContractFactory(
@@ -29,13 +34,6 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying Fallback smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
-
         // deploy the contract
         const counter_contract = await counter_Factory.deploy();
         const myContract_contract = await myContract_Factory.deploy();
@@ -48,7 +46,7 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
         counter = new Contract(counter_contract.address, counter_artifacts.abi, zkEVM_provider);
         myContract = new Contract(myContract_contract.address, myContract_artifacts.abi, zkEVM_provider);
 
-        console.log("Interface Contract Deployed at: ", myContract.address);
+        console.log("\nInterface Contract Deployed at: ", myContract.address);
         console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${myContract.address}`);
     });
 

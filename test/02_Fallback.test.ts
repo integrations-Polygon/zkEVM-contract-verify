@@ -15,7 +15,12 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        //c onsole.log("\nFALLBACK UNIT TEST CASES\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Fallback smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const fallback_factory = new ethers.ContractFactory(
@@ -28,13 +33,6 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             sendToFallback_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying Fallback smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const fallback_contract = await fallback_factory.deploy();
@@ -52,7 +50,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             zkEVM_provider
         );
 
-        console.log("Fallback Contract Deployed at: ", sendToFallback.address);
+        console.log("\nFallback Contract Deployed at: ", sendToFallback.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${sendToFallback.address}`
         );

@@ -17,17 +17,15 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR Batch Minting using ERC721Psi TOKEN\n");
-
-        // get the contract factory
-        const erc721PsiContractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
         console.log("\n-----------------------------------------------------------------------------");
         console.log("Deploying ERC721psi Token smart contract on zkEVM chain....");
         console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
+
+        // get the contract factory
+        const erc721PsiContractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
         // deploy the contract
         const erc721PsiToken = await erc721PsiContractFactory.deploy();
@@ -38,7 +36,7 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         erc721PsiTokenContract = new Contract(erc721PsiToken.address, abi, zkEVM_provider);
 
-        console.log("ERC721Psi Token Contract Deployed at: ", erc721PsiTokenContract.address);
+        console.log("\nERC721Psi Token Contract Deployed at: ", erc721PsiTokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc721PsiTokenContract.address}`
         );

@@ -16,13 +16,12 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        // console.log("\nAUTOMATE UNIT TEST CASES FOR PROXY CONTRACT\n");
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
         console.log("\n-----------------------------------------------------------------------------");
         console.log("Deploying Proxy smart contract & its Implementation on zkEVM chain....");
         console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const Example = new ethers.ContractFactory(
@@ -41,7 +40,7 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
         proxyContract = new Contract(proxy.address, example_artifacts.abi, zkEVM_provider);
         writeAsProxy = exampleContract.attach(proxyContract.address);
 
-        console.log("Implementation Contract Deployed at: ", exampleContract.address);
+        console.log("\nImplementation Contract Deployed at: ", exampleContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${exampleContract.address}`
         );

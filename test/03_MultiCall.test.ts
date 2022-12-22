@@ -15,7 +15,12 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        // console.log("\nMULTICALL UNIT TEST CASES\n");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying MultiCall smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
+
+        // check & display current balances
+        await checkBalances(derivedNode);
 
         // get the contract factory
         const testMultiCall_factory = new ethers.ContractFactory(
@@ -28,13 +33,6 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
             MultiCall_artifacts.bytecode,
             ownerSigner
         );
-
-        // console.log("Checking if wallet addresses have any balance....");
-        await checkBalances(derivedNode);
-
-        console.log("\n-----------------------------------------------------------------------------");
-        console.log("Deploying MultiCall smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const testMultiCall_contract = await testMultiCall_factory.deploy();
@@ -52,7 +50,7 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
         );
         multiCallContract = new Contract(multiCall_contract.address, MultiCall_artifacts.abi, zkEVM_provider);
 
-        console.log("TestMultiCall Contract Deployed at: ", testMultiCallContract.address);
+        console.log("\nTestMultiCall Contract Deployed at: ", testMultiCallContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${testMultiCallContract.address}`
         );

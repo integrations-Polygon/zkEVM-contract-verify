@@ -5,3 +5,4 @@ src/types
 .env
 yarn.lock
 yarn-error.log
+.DS_STORE

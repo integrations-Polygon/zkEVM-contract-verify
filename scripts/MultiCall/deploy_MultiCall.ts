@@ -11,7 +11,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", multiCall.address);
+    console.log("Contract Deployed at: ", multiCall.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${multiCall.address}`);
 }
 deploy();

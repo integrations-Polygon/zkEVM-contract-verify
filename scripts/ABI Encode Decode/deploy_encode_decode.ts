@@ -12,7 +12,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", abiContract.address);
+    console.log("Contract Deployed at: ", abiContract.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract.address}`);
 }
 deploy();

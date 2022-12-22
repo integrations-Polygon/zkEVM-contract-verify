@@ -12,7 +12,7 @@ async function deploy() {
     const example = await Example.deploy();
     console.log("\nDeploying Implementation contract on zkEVM chain....");
     await delay(20000);
-    console.log("\nImplementation contract deployed at: ", example.address);
+    console.log("\nImplementation Contract Deployed at: ", example.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${example.address}`);
 
     // get the proxy contract to deploy
@@ -21,7 +21,7 @@ async function deploy() {
     const exampleProxy = await ExampleProxy.deploy(example.address, "0x");
     console.log("\nDeploying proxy contract on zkEVM chain....");
     await delay(20000);
-    console.log("\ncontract deployed at: ", exampleProxy.address);
+    console.log("Contract Deployed at: ", exampleProxy.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${exampleProxy.address}`);
 }
 

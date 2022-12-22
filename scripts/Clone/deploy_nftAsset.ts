@@ -11,7 +11,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", nftAsset.address);
+    console.log("Contract Deployed at: ", nftAsset.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${nftAsset.address}`);
 }
 deploy();

@@ -11,7 +11,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\nERC1155 Token contract deployed at: ", erc1155.address);
+    console.log("\nERC1155 Token Contract Deployed at: ", erc1155.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${erc1155.address}`);
 }
 

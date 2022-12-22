@@ -11,7 +11,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", myToken.address);
+    console.log("Contract Deployed at: ", myToken.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${myToken.address}`);
 }
 deploy();

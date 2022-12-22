@@ -18,7 +18,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", multiSigWallet.address);
+    console.log("Contract Deployed at: ", multiSigWallet.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${multiSigWallet.address}`);
 }
 deploy();

@@ -13,7 +13,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\ncontract deployed at: ", assetFactory.address);
+    console.log("Contract Deployed at: ", assetFactory.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${assetFactory.address}`);
 }
 deploy();

@@ -11,7 +11,7 @@ async function deploy() {
     }
 
     await delay(20000);
-    console.log("\nERC20 Token contract deployed at: ", erc165.address);
+    console.log("\nERC20 Token Contract Deployed at: ", erc165.address);
     console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${erc165.address}`);
 }
 

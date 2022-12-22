@@ -6,6 +6,7 @@ import {
     userSigner,
     aliceSigner,
     bobSigner,
+    bobPrivateKey,
 } from "./utils/setupWallet";
 import { expect } from "chai";
 import dotenv from "dotenv";
@@ -16,8 +17,6 @@ import { checkBalances } from "./utils/checkBalances";
 import ERC20Token_artifacts from "../artifacts/src/marketplace_contracts/tokens/ERC20Token.sol/ERC20Token.json";
 import ERC721Token_artifacts from "../artifacts/src/marketplace_contracts/tokens/ERC721Token.sol/ERC721Token.json";
 import NFTSale_artifacts from "../artifacts/src/marketplace_contracts/NFTSale.sol/NFTSale.json";
-
-const bobPrivateKey: any = process.env.BOB_PRIVATEKEY;
 
 describe("NFTSale contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed

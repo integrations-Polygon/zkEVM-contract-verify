@@ -17,7 +17,7 @@ import ERC20Token_artifacts from "../artifacts/src/marketplace_contracts/tokens/
 import ERC721Token_artifacts from "../artifacts/src/marketplace_contracts/tokens/ERC721Token.sol/ERC721Token.json";
 import NFTSale_artifacts from "../artifacts/src/marketplace_contracts/NFTSale.sol/NFTSale.json";
 
-const alicePrivateKey: any = process.env.ALICE_PRIVATEKEY;
+const bobPrivateKey: any = process.env.BOB_PRIVATEKEY;
 
 describe("NFTSale contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contract to be deployed
@@ -29,7 +29,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR NFT SALE MARKETPLACE CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT SALE MARKETPLACE CONTRACT\n");
 
         /* 
             GET THE CONTRACT FACTORY
@@ -52,10 +52,12 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying NFTSale contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTSale smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -80,19 +82,20 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
         nftContract = new Contract(nft_contract.address, ERC721Token_artifacts.abi, zkEVM_provider);
         saleContract = new Contract(sale_contract.address, NFTSale_artifacts.abi, zkEVM_provider);
 
-        console.log("\nERC20 token contract deployed at: ", tokenContract.address);
+        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );
-        console.log("ERC721 token contract deployed at: ", nftContract.address);
+        console.log("\n");
+        console.log("ERC721 token Contract Deployed at: ", nftContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftContract.address}`
         );
-        console.log("NFTSale contract deployed at: ", saleContract.address);
+        console.log("\n");
+        console.log("NFTSale Contract Deployed at: ", saleContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${saleContract.address}`
         );
-        console.log("\n");
     });
 
     describe("Setting up NFTSale smart contract", async () => {
@@ -100,7 +103,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const transferToken_alice = await tokenContract
                 .connect(ownerSigner)
                 .transfer(aliceSigner.getAddress(), "10000");
-            await transferToken_alice.wait(1);
+            await transferToken_alice.wait();
             expect(await tokenContract.balanceOf(aliceSigner.getAddress())).eq("10000");
         });
 
@@ -108,7 +111,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const transferToken_bob = await tokenContract
                 .connect(ownerSigner)
                 .transfer(bobSigner.getAddress(), "10000");
-            await transferToken_bob.wait(1);
+            await transferToken_bob.wait();
             expect(await tokenContract.balanceOf(bobSigner.getAddress())).eq("10000");
         });
 
@@ -116,7 +119,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const transferToken_saleContract = await tokenContract
                 .connect(ownerSigner)
                 .transfer(saleContract.address, "10000");
-            await transferToken_saleContract.wait(1);
+            await transferToken_saleContract.wait();
             expect(await tokenContract.balanceOf(saleContract.address)).eq("10000");
         });
 
@@ -124,7 +127,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const whitelist_owner = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(ownerSigner.getAddress());
-            await whitelist_owner.wait(1);
+            await whitelist_owner.wait();
             expect(await nftContract.checkWhitelist(ownerSigner.getAddress())).eq(true);
         });
 
@@ -132,7 +135,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const whitelist_alice = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(aliceSigner.getAddress());
-            await whitelist_alice.wait(1);
+            await whitelist_alice.wait();
             expect(await nftContract.checkWhitelist(aliceSigner.getAddress())).eq(true);
         });
 
@@ -140,7 +143,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const whitelist_bob = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(bobSigner.getAddress());
-            await whitelist_bob.wait(1);
+            await whitelist_bob.wait();
             expect(await nftContract.checkWhitelist(bobSigner.getAddress())).eq(true);
         });
 
@@ -148,7 +151,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const whitelist_saleContract = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(saleContract.address);
-            await whitelist_saleContract.wait(1);
+            await whitelist_saleContract.wait();
             expect(await nftContract.checkWhitelist(saleContract.address)).eq(true);
         });
 
@@ -156,7 +159,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const issueToken_owner = await nftContract
                 .connect(ownerSigner)
                 .issueToken(ownerSigner.getAddress(), 1, `owner-hash-01`);
-            await issueToken_owner.wait(1);
+            await issueToken_owner.wait();
             expect(await nftContract.ownerOf(1)).eq(await ownerSigner.getAddress());
         });
 
@@ -164,7 +167,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const issueToken_alice = await nftContract
                 .connect(ownerSigner)
                 .issueToken(aliceSigner.getAddress(), 2, `alice-hash-02`);
-            await issueToken_alice.wait(1);
+            await issueToken_alice.wait();
             expect(await nftContract.ownerOf(2)).eq(await aliceSigner.getAddress());
         });
 
@@ -172,7 +175,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const issueToken_bob = await nftContract
                 .connect(ownerSigner)
                 .issueToken(bobSigner.getAddress(), 3, `bob-hash-03`);
-            await issueToken_bob.wait(1);
+            await issueToken_bob.wait();
             expect(await nftContract.ownerOf(3)).eq(await bobSigner.getAddress());
         });
     });
@@ -186,7 +189,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const setAdminResponse = await saleContract
                 .connect(ownerSigner)
                 .setAdmin(adminSigner.getAddress(), true);
-            await setAdminResponse.wait(1);
+            await setAdminResponse.wait();
             expect(await saleContract.isAdmin(adminSigner.getAddress())).eq(true);
         });
 
@@ -204,10 +207,10 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
 
         it("...should allow owner to start the sale", async () => {
             const approvalResponse = await nftContract.connect(ownerSigner).approve(saleContract.address, 1);
-            await approvalResponse.wait(1);
+            await approvalResponse.wait();
 
             const saleResponse = await saleContract.connect(ownerSigner).sellNFTBundle([1], 1000);
-            await saleResponse.wait(1);
+            await saleResponse.wait();
             expect(await nftContract.ownerOf(1)).eq(saleContract.address);
         });
 
@@ -224,40 +227,30 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             const approvalResponse = await tokenContract
                 .connect(aliceSigner)
                 .approve(saleContract.address, 1000);
-            await approvalResponse.wait(1);
+            await approvalResponse.wait();
 
             const purchaseResponse = await saleContract.connect(aliceSigner).purchaseNFT(1, 1000);
-            await purchaseResponse.wait(1);
-            expect(await tokenContract.ownerOf(1)).eq(aliceSigner);
-        });
-
-        /*
-            AWAITING INTERNAL TRANSACTION ERROR
-        */
-
-        it("...should allow seller to cancel an ongoing sale", async () => {
-            const approvalResponse = await nftContract.connect(bobSigner).approve(saleContract.address, 3);
-            await approvalResponse.wait(1);
-
-            const saleResponse = await saleContract.connect(bobSigner).sellNFTBundle([3], 1000);
-            await saleResponse.wait(1);
-            expect(await nftContract.ownerOf(3)).eq(saleContract.address);
-
-            const cancelSaleResponse = await saleContract.connect(bobSigner).cancelListingBundle(2);
-            await cancelSaleResponse.wait(1);
-            expect(await nftContract.ownerOf(3)).eq(await bobSigner.getAddress());
+            await purchaseResponse.wait();
+            expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
         });
 
         it("...can sign messages and verify", async () => {
+            const approvalResponse = await nftContract.connect(aliceSigner).approve(saleContract.address, 2);
+            await approvalResponse.wait();
+
+            const saleResponse = await saleContract.connect(aliceSigner).sellNFTBundle([2], 1000);
+            await saleResponse.wait();
+            expect(await nftContract.ownerOf(2)).eq(saleContract.address);
+
             const START_TIME: number = Math.round(Date.now() / 1000);
             // const saleResponse = await saleContract.connect(bobSigner).sellNFTBundle([3], 1000);
-            // await saleResponse.wait(1);
+            // await saleResponse.wait();
             // expect(await nftContract.ownerOf(3)).eq(saleContract.address);
 
             const approvalResponse_tokenContract = await tokenContract
-                .connect(aliceSigner)
+                .connect(bobSigner)
                 .approve(saleContract.address, 1000);
-            await approvalResponse_tokenContract.wait(1);
+            await approvalResponse_tokenContract.wait();
 
             let domainData: any = {
                 name: "NFTSale",
@@ -313,7 +306,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             ];
 
             let message: any = {
-                buyer: await aliceSigner.getAddress(),
+                buyer: await bobSigner.getAddress(),
                 price: 400,
                 listingId: 2,
                 timestamp: START_TIME,
@@ -332,7 +325,7 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
 
             const signature = signTypedData({
                 privateKey: Buffer.from(
-                    alicePrivateKey, // Private key of alice
+                    bobPrivateKey, // Private key of alice
                     "hex"
                 ),
                 data: dataToSign,
@@ -347,10 +340,27 @@ describe("NFTSale contract deployment & tests on zkEVM", async () => {
             if (![27, 28].includes(v)) v += 27;
 
             const offerAcceptResponse = await saleContract
-                .connect(bobSigner)
-                .acceptOffer(aliceSigner.getAddress(), 400, 2, START_TIME, START_TIME + 100000000, r, s, v);
-            await offerAcceptResponse.wait(1);
-            expect(await nftContract.ownerOf(3)).eq(await aliceSigner.getAddress());
+                .connect(aliceSigner)
+                .acceptOffer(bobSigner.getAddress(), 400, 2, START_TIME, START_TIME + 100000000, r, s, v);
+            await offerAcceptResponse.wait();
+            expect(await nftContract.ownerOf(2)).eq(await bobSigner.getAddress());
+        });
+
+        /*
+            AWAITING INTERNAL TRANSACTION ERROR
+        */
+
+        it("...should allow seller to cancel an ongoing sale", async () => {
+            const approvalResponse = await nftContract.connect(bobSigner).approve(saleContract.address, 3);
+            await approvalResponse.wait();
+
+            const saleResponse = await saleContract.connect(bobSigner).sellNFTBundle([3], 1000);
+            await saleResponse.wait();
+            expect(await nftContract.ownerOf(3)).eq(saleContract.address);
+
+            const cancelSaleResponse = await saleContract.connect(bobSigner).cancelListingBundle(3);
+            await cancelSaleResponse.wait();
+            expect(await nftContract.ownerOf(3)).eq(await bobSigner.getAddress());
         });
     });
 });

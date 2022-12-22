@@ -28,7 +28,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR NFT LENDING CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR NFT LENDING CONTRACT\n");
 
         /* 
             GET THE CONTRACT FACTORY
@@ -57,10 +57,12 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying NFTLend contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying NFTLend smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         /* 
             DEPLOY THE CONTRACTS 
@@ -94,23 +96,25 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
         );
         lendContract = new Contract(lend_contract.address, NFTLend_artifacts.abi, zkEVM_provider);
 
-        console.log("\nERC20 token contract deployed at: ", tokenContract.address);
+        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );
-        console.log("ERC721 token contract deployed at: ", nftContract.address);
+        console.log("\n");
+        console.log("ERC721 token Contract Deployed at: ", nftContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftContract.address}`
         );
-        console.log("ERC721 token 2 contract deployed at: ", nftLendContract.address);
+        console.log("\n");
+        console.log("ERC721 token 2 Contract Deployed at: ", nftLendContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftLendContract.address}`
         );
-        console.log("NFTLend contract deployed at: ", lendContract.address);
+        console.log("\n");
+        console.log("NFTLend Contract Deployed at: ", lendContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${lendContract.address}`
         );
-        console.log("\n");
     });
 
     describe("Setting up NFTLend smart contract", async () => {
@@ -227,9 +231,12 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
         });
 
         it("...should be able to set lender address on ERC721_lender token smart contract", async () => {
-            await nftLendContract.connect(ownerSigner).setLenderContractAddress(lendContract.address);
+            const setLender = await nftLendContract
+                .connect(ownerSigner)
+                .setLenderContractAddress(lendContract.address);
+            await setLender.wait();
             expect(await nftLendContract.connect(ownerSigner).getLenderContractAddress()).eq(
-                nftLendContract.address
+                lendContract.address
             );
         });
     });
@@ -249,7 +256,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const approveResult = await nftContract.connect(aliceSigner).approve(lendContract.address, 1);
             await approveResult.wait();
 
-            const saleResult = await lendContract.connect(aliceSigner).lendNft([1], 1000, 25, 100);
+            const saleResult = await lendContract.connect(aliceSigner).lendNft([1], 1000, 50, 100);
             await saleResult.wait();
             expect(await nftContract.ownerOf(1)).eq(lendContract.address);
         });

@@ -20,7 +20,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR CLONE CONTRACT\n");
+        //console.log("\nAUTOMATE UNIT TEST CASES FOR CLONE CONTRACT\n");
 
         // get the contract factory
         const nftAsset_Factory = new ethers.ContractFactory(
@@ -39,10 +39,12 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying clone contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Clone smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const nftAsset_contract = await nftAsset_Factory.deploy();
@@ -67,22 +69,23 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             zkEVM_provider
         );
 
-        console.log("\nNFT asset contract deployed at: ", nftAssetContract.address);
+        console.log("NFT asset Contract Deployed at: ", nftAssetContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${nftAssetContract.address}`
         );
-        console.log("Clone create asset factory contract deployed at: ", assetFactoryContract.address);
+        console.log("\n");
+        console.log("Clone create asset factory Contract Deployed at: ", assetFactoryContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${assetFactoryContract.address}`
         );
+        console.log("\n");
         console.log(
-            "Clone create2 asset factory contract deployed at: ",
+            "Clone create2 asset factory Contract Deployed at: ",
             assetFactoryContractCreate2.address
         );
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${assetFactoryContractCreate2.address}`
         );
-        console.log("\n");
     });
 
     describe("Clone create contract functionalities tests", async () => {
@@ -100,10 +103,15 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
         });
 
         it("...can set service address", async () => {
-            const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
-            const setService = await assetFactoryContract.connect(ownerSigner).setService(address);
-            await setService.wait(1);
-            expect(await assetFactoryContract.service()).eq(address);
+            /*
+                SERVICE ADDRESS HAS TO BE MSG.SENDER, IN OUR TEST CASE ITS GONNA BE OWNER SIGNER
+            */
+            // const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
+            const setService = await assetFactoryContract
+                .connect(ownerSigner)
+                .setService(ownerSigner.getAddress());
+            await setService.wait();
+            expect(await assetFactoryContract.service()).eq(await ownerSigner.getAddress());
         });
 
         it("...can clone nft contract", async () => {
@@ -152,15 +160,20 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const setService = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .setNFTContract(nftAssetContract.address);
-            await setService.wait(1);
+            await setService.wait();
             expect(await assetFactoryContractCreate2.nftContract()).eq(nftAssetContract.address);
         });
 
         it("...can set service address", async () => {
-            const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
-            const setService = await assetFactoryContractCreate2.connect(ownerSigner).setService(address);
-            await setService.wait(1);
-            expect(await assetFactoryContractCreate2.service()).eq(address);
+            /*
+                SERVICE ADDRESS HAS TO BE MSG.SENDER, IN OUR TEST CASE ITS GONNA BE OWNER SIGNER
+            */
+            // const address = "0xC980bBe81d7AE0CcbF72B6AbD59534dd8d176c77";
+            const setService = await assetFactoryContractCreate2
+                .connect(ownerSigner)
+                .setService(ownerSigner.getAddress());
+            await setService.wait();
+            expect(await assetFactoryContractCreate2.service()).eq(await ownerSigner.getAddress());
         });
 
         it("...can clone nft contract", async () => {

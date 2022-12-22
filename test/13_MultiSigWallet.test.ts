@@ -23,7 +23,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR MULTISIG WALLET\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR MULTISIG WALLET\n");
 
         // get the contract factory
         const multiSigWalletContractFactory = new ethers.ContractFactory(
@@ -33,10 +33,12 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         );
         const erc20ContractFactory = new ethers.ContractFactory(erc20.abi, erc20.bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying MultiSig Wallet contract and sample erc20 token on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying MultiSig Wallet smart contract and erc20 token on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the multisig wallet contract
         const multiSigWallet = await multiSigWalletContractFactory.deploy([
@@ -61,15 +63,15 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
         // get the instance of the deployed sample erc20 token contract
         erc20Contract = new Contract(erc20Token.address, erc20.abi, zkEVM_provider);
 
-        console.log("\nMultiSig Wallet contract deployed at: ", multiSigWalletContract.address);
+        console.log("MultiSig Wallet Contract Deployed at: ", multiSigWalletContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${multiSigWalletContract.address}`
         );
-        console.log("\nSample erc20 token contract deployed at: ", erc20Contract.address);
+        console.log("\n");
+        console.log("Sample erc20 token Contract Deployed at: ", erc20Contract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc20Contract.address}`
         );
-        console.log("\n");
     });
 
     describe("Setting up multisig wallet smart contract", async () => {
@@ -77,7 +79,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const transferOwnershipTx = await erc20Contract
                 .connect(ownerSigner)
                 .transferOwnership(multiSigWalletContract.address);
-            await transferOwnershipTx.wait(1);
+            await transferOwnershipTx.wait();
             expect(await erc20Contract.owner()).eq(multiSigWalletContract.address);
         });
 
@@ -85,7 +87,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const transferTx = await erc20Contract
                 .connect(ownerSigner)
                 .transfer(multiSigWalletContract.address, BigNumber.from("1000000000"));
-            await transferTx.wait(1);
+            await transferTx.wait();
             expect(await erc20Contract.balanceOf(multiSigWalletContract.address)).eq(
                 BigNumber.from("1000000000")
             );
@@ -111,7 +113,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
                 .connect(ownerSigner)
                 .submitTransaction(erc20Contract.address, 0, data);
 
-            await submitTransactionTx.wait(1);
+            await submitTransactionTx.wait();
 
             expect(await multiSigWalletContract.getTransactionCount()).eq(1);
         });
@@ -128,17 +130,17 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const ownerConfirmationTx = await multiSigWalletContract
                 .connect(ownerSigner)
                 .confirmTransaction(0);
-            await ownerConfirmationTx.wait(1);
+            await ownerConfirmationTx.wait();
             expect(await multiSigWalletContract.isConfirmed(0, ownerSigner.getAddress())).to.be.true;
 
             const adminConfirmationTx = await multiSigWalletContract
                 .connect(adminSigner)
                 .confirmTransaction(0);
-            await adminConfirmationTx.wait(1);
+            await adminConfirmationTx.wait();
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).to.be.true;
 
             const userConfirmationTx = await multiSigWalletContract.connect(userSigner).confirmTransaction(0);
-            await userConfirmationTx.wait(1);
+            await userConfirmationTx.wait();
             expect(await multiSigWalletContract.isConfirmed(0, userSigner.getAddress())).to.be.true;
 
             expect(await (await multiSigWalletContract.getTransaction(0)).numConfirmations).eq(
@@ -161,12 +163,12 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const revokeConfirmationTx = await multiSigWalletContract
                 .connect(adminSigner)
                 .revokeConfirmation(0);
-            await revokeConfirmationTx.wait(1);
+            await revokeConfirmationTx.wait();
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(false);
 
             // REVERT REVOKE CONFIRMATION
             const confirmationTx = await multiSigWalletContract.connect(adminSigner).confirmTransaction(0);
-            await confirmationTx.wait(1);
+            await confirmationTx.wait();
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(true);
         });
 
@@ -184,7 +186,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
 
         it("...should pass check for owners can execute transaction", async () => {
             const executeTx = await multiSigWalletContract.connect(ownerSigner).executeTransaction(0);
-            await executeTx.wait(1);
+            await executeTx.wait();
 
             expect(await (await multiSigWalletContract.getTransaction(0)).executed).to.be.true;
         });

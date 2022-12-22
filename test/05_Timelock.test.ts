@@ -1,3 +1,4 @@
+import { sleep } from "./utils/wait";
 import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
@@ -7,18 +8,16 @@ import { checkBalances } from "./utils/checkBalances";
 import timelock_artifacts from "../artifacts/src/timelock_contracts/Timelock.sol/Timelock.json";
 import testTimelock_artifacts from "../artifacts/src/timelock_contracts/TestTimelock.sol/TestTimelock.json";
 
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-
 describe("Timelock smart contract deployment & tests on zkEVM", async () => {
     // declare an instance of the contracts to be deployed
     let timelockContract: any, testTimelockContract: any;
-    let timestamp;
+    let timestamp: any;
 
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR TIMELOCK CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR TIMELOCK CONTRACT\n");
 
         // get the contract factory
         const timelockContractFactory = new ethers.ContractFactory(
@@ -32,10 +31,12 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying Timelock contract and testTimelock contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Timelock smart contract and testTimelock contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the Timelock contract
         const timelock = await timelockContractFactory.deploy();
@@ -55,17 +56,17 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed TestTimelock contract
         testTimelockContract = new Contract(testTimelock.address, testTimelock_artifacts.abi, zkEVM_provider);
 
-        console.log("\nTimelock contract deployed at: ", timelockContract.address);
+        console.log("Timelock Contract Deployed at: ", timelockContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${timelockContract.address}`
         );
-        console.log("\nTestTimelock contract deployed at: ", testTimelockContract.address);
+        console.log("\n");
+        console.log("TestTimelock Contract Deployed at: ", testTimelockContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${testTimelockContract.address}`
         );
-        console.log("\n");
 
-        // get block.timestamp + 50
+        // get block.timestamp + 20
         timestamp = await testTimelockContract.getTimestamp();
     });
 
@@ -83,7 +84,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
 
     describe("Timelock smart contract functionality tests", async () => {
         it("...should have correct owner", async () => {
-            expect(await timelockContract.owner()).eq(ownerSigner.getAddress());
+            expect(await timelockContract.owner()).eq(await ownerSigner.getAddress());
         });
 
         it("...should be able to queue a transaction under timelock", async () => {
@@ -91,7 +92,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             const queueTx = await timelockContract
                 .connect(ownerSigner)
                 .queue(testTimelockContract.address, 0, "test()", 0x00, timestamp);
-            await queueTx.wait(1);
+            await queueTx.wait(2);
 
             // get txId
             const txId = await timelockContract.getTxId(

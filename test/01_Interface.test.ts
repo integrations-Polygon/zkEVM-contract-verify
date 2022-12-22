@@ -15,7 +15,7 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nINTERFACE UNIT TEST CASES\n");
+        // console.log("\nINTERFACE UNIT TEST CASES\n");
 
         // get the contract factory
         const counter_Factory = new ethers.ContractFactory(
@@ -29,8 +29,12 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
+
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Fallback smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const counter_contract = await counter_Factory.deploy();
@@ -44,15 +48,14 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
         counter = new Contract(counter_contract.address, counter_artifacts.abi, zkEVM_provider);
         myContract = new Contract(myContract_contract.address, myContract_artifacts.abi, zkEVM_provider);
 
-        console.log("\ncontract deployed at: ", myContract.address);
+        console.log("Interface Contract Deployed at: ", myContract.address);
         console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${myContract.address}`);
-        console.log("\n");
     });
 
     describe("Interface contract functionalities tests", async () => {
         it("...can increment value", async () => {
             const tx = await myContract.connect(ownerSigner).incrementCounter(counter.address);
-            await tx.wait(1);
+            await tx.wait();
             expect(await myContract.getCount(counter.address)).eq("1");
         });
     });

@@ -16,16 +16,17 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
     const BYTES2 = "0x2140ed820000000000000000000000000000000000000000000000000000000000000037";
 
     before(async () => {
-        console.log("\nEncode Decode UNIT TEST CASES\n");
+        console.log("DEPLOYING ALL UNIT TEST SMART CONTRACTS ON-CHAIN\n");
 
         // get the contract factory
         const contractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ABI encode decode smart contract on zkEVM chain....");
-
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying ABI encode decode smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
         // deploy the contract
         const contract = await contractFactory.deploy();
 
@@ -35,11 +36,10 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         abiContract = new Contract(contract.address, abi, zkEVM_provider);
 
-        console.log("\ncontract deployed at: ", abiContract.address);
+        console.log("ABI Contract Deployed at: ", abiContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${abiContract.address}`
         );
-        console.log("\n");
     });
 
     describe("ABI encode decode contract functionalities tests", async () => {

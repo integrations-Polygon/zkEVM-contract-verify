@@ -14,15 +14,17 @@ describe("ERC165 contract deployment & tests on zkEVM", async function () {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR ERC165\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR ERC165\n");
 
         // get the contract factory
         const erc165ContractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC165 smart contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying ERC165 smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const erc165 = await erc165ContractFactory.deploy();
@@ -33,9 +35,8 @@ describe("ERC165 contract deployment & tests on zkEVM", async function () {
         // get the instance of the deployed contract
         erc165Contract = new Contract(erc165.address, abi, zkEVM_provider);
 
-        console.log("\nERC165 contract deployed at: ", erc165.address);
+        console.log("ERC165 Contract Deployed at: ", erc165.address);
         console.log(`Contract Details: https://explorer.public.zkevm-test.net/address/${erc165.address}`);
-        console.log("\n");
     });
 
     describe("ERC165 contract interface availability test", async () => {

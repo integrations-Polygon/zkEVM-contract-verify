@@ -21,15 +21,17 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR STANDARD ERC20 TOKEN\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR STANDARD ERC20 TOKEN\n");
 
         // get the contract factory
         const erc20TokenFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC20 token smart contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying ERC20 token smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const erc20Token = await erc20TokenFactory.deploy();
@@ -40,11 +42,10 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         erc20TokenContract = new Contract(erc20Token.address, abi, zkEVM_provider);
 
-        console.log("\nERC20 token contract deployed at: ", erc20TokenContract.address);
+        console.log("ERC20 token Contract Deployed at: ", erc20TokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc20TokenContract.address}`
         );
-        console.log("\n");
     });
 
     describe("ERC20 token functionalities tests", async () => {
@@ -66,7 +67,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const mintTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .mintERC20(aliceSigner.getAddress(), ethers.utils.parseEther("10"));
-            await mintTx.wait(1);
+            await mintTx.wait();
             expect(await erc20TokenContract.balanceOf(aliceSigner.getAddress())).eq(
                 ethers.utils.parseEther("10")
             );
@@ -76,7 +77,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const transferTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .transfer(adminSigner.getAddress(), ethers.utils.parseEther("1"));
-            await transferTx.wait(1);
+            await transferTx.wait();
             expect(await erc20TokenContract.balanceOf(adminSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
             );
@@ -98,7 +99,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const approveTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(userSigner.getAddress(), ethers.utils.parseEther("1"));
-            await approveTx.wait(1);
+            await approveTx.wait();
 
             expect(await erc20TokenContract.allowance(ownerSigner.getAddress(), userSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
@@ -109,7 +110,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const transferTx = await erc20TokenContract
                 .connect(userSigner)
                 .transferFrom(ownerSigner.getAddress(), userSigner.getAddress(), 1000);
-            await transferTx.wait(1);
+            await transferTx.wait();
 
             expect(await erc20TokenContract.balanceOf(userSigner.getAddress())).eq(1000);
         });
@@ -118,7 +119,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const tx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(aliceSigner.getAddress(), ethers.utils.parseEther("1"));
-            await tx.wait(1);
+            await tx.wait();
             await expect(
                 erc20TokenContract
                     .connect(aliceSigner)

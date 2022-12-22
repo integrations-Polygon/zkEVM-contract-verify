@@ -16,12 +16,13 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR PROXY CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR PROXY CONTRACT\n");
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
-
-        console.log("\nDeploying proxy contract & its implementation on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Proxy smart contract & its Implementation on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // get the contract factory
         const Example = new ethers.ContractFactory(
@@ -40,15 +41,15 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
         proxyContract = new Contract(proxy.address, example_artifacts.abi, zkEVM_provider);
         writeAsProxy = exampleContract.attach(proxyContract.address);
 
-        console.log("\nImplementation contract deployed at: ", exampleContract.address);
+        console.log("Implementation Contract Deployed at: ", exampleContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${exampleContract.address}`
         );
-        console.log("Proxy contract deployed at: ", proxyContract.address);
+        console.log("\n");
+        console.log("Proxy Contract Deployed at: ", proxyContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${proxyContract.address}`
         );
-        console.log("\n");
     });
 
     describe("proxy contract functionalities tests", async () => {
@@ -58,7 +59,7 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
 
         it("...can write function", async () => {
             const tx = await writeAsProxy.connect(ownerSigner).setUint("10");
-            await tx.wait(1);
+            await tx.wait();
             expect(await proxyContract.getUint()).to.equal("10");
         });
     });

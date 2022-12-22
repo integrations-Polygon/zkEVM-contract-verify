@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { sleep } from "./utils/wait";
 import dotenv from "dotenv";
 dotenv.config();
 import { setupWallet, zkEVM_provider, ownerSigner } from "./utils/setupWallet";
@@ -17,7 +18,7 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR STAKING CONTRACT\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR STAKING CONTRACT\n");
 
         // get the contract factory
         const token_Factory = new ethers.ContractFactory(
@@ -31,10 +32,11 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
-
-        console.log("\nDeploying staking contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Staking smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const token_contract = await token_Factory.deploy();
@@ -47,15 +49,15 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
         tokenContract = new Contract(token_contract.address, token_artifacts.abi, zkEVM_provider);
         stakeContract = new Contract(stake_contract.address, stake_artifacts.abi, zkEVM_provider);
 
-        console.log("\nERC20 token contract deployed at: ", tokenContract.address);
+        console.log("ERC20 token Contract Deployed at: ", tokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${tokenContract.address}`
         );
-        console.log("staking contract deployed at: ", stakeContract.address);
+        console.log("\n");
+        console.log("Staking Contract Deployed at: ", stakeContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${stakeContract.address}`
         );
-        console.log("\n");
     });
 
     describe("Setting up staking smart contract", async () => {
@@ -63,21 +65,21 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
             const tx = await tokenContract
                 .connect(ownerSigner)
                 .transfer(stakeContract.address, ethers.utils.parseEther("100"));
-            await tx.wait();
+            await tx.wait(1);
         });
 
         it("...should approve token for staking smart contract", async () => {
             const approve = await tokenContract
                 .connect(ownerSigner)
                 .approve(stakeContract.address, ethers.utils.parseEther("10000"));
-            await approve.wait();
+            await approve.wait(1);
         });
     });
 
     describe("Staking contract functionalities tests", async () => {
-        it("can stake ", async () => {
+        it("...can stake ", async () => {
             const stake = await stakeContract.connect(ownerSigner).stakeToken(ethers.utils.parseEther("100"));
-            await stake.wait();
+            await stake.wait(1);
             const blockNumber = await zkEVM_provider.getBlockNumber();
             timestamp = (await zkEVM_provider.getBlock(blockNumber)).timestamp;
             expect(await stakeContract.addressStaked(await ownerSigner.getAddress())).eq(true);
@@ -91,19 +93,20 @@ describe("Staking contract deployment & tests on zkEVM", async () => {
 
         it("...can pause staking", async () => {
             const tx = await stakeContract.connect(ownerSigner).pause();
-            await tx.wait();
+            await tx.wait(1);
             expect(await stakeContract.paused()).eq(true);
         });
 
         it("...can unpause staking", async () => {
             const tx = await stakeContract.connect(ownerSigner).unpause();
-            await tx.wait();
+            await tx.wait(1);
             expect(await stakeContract.paused()).eq(false);
         });
 
         it("...can claim reward", async () => {
+            await sleep(60000);
             const tx = await stakeContract.connect(ownerSigner).claimReward();
-            await tx.wait();
+            await tx.wait(1);
             expect(await stakeContract.isClaimReward(await ownerSigner.getAddress())).eq(true);
         });
     });

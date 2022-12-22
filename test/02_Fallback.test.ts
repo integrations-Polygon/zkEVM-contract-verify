@@ -15,7 +15,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nFALLBACK UNIT TEST CASES\n");
+        //c onsole.log("\nFALLBACK UNIT TEST CASES\n");
 
         // get the contract factory
         const fallback_factory = new ethers.ContractFactory(
@@ -29,10 +29,12 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying Fallback smart contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying Fallback smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const fallback_contract = await fallback_factory.deploy();
@@ -50,11 +52,10 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             zkEVM_provider
         );
 
-        console.log("\nFallback contract deployed at: ", sendToFallback.address);
+        console.log("Fallback Contract Deployed at: ", sendToFallback.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${sendToFallback.address}`
         );
-        console.log("\n");
     });
 
     describe("Fallback contract functionalities tests", async () => {
@@ -62,7 +63,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             const tx = await sendToFallback
                 .connect(ownerSigner)
                 .transferToFallback(fallback.address, { value: ethers.utils.parseEther("0.00001") });
-            await tx.wait(1);
+            await tx.wait();
             expect(await fallback.getBalance()).eq(ethers.utils.parseEther("0.00001"));
         });
 
@@ -70,7 +71,7 @@ describe("Fallback contract deployment & tests on zkEVM", async () => {
             const tx = await sendToFallback
                 .connect(ownerSigner)
                 .callFallback(fallback.address, { value: ethers.utils.parseEther("0.00001") });
-            await tx.wait(1);
+            await tx.wait();
             expect(await fallback.getBalance()).eq(ethers.utils.parseEther("0.00002"));
         });
     });

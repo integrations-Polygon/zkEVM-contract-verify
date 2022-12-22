@@ -15,7 +15,7 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\nMULTICALL UNIT TEST CASES\n");
+        // console.log("\nMULTICALL UNIT TEST CASES\n");
 
         // get the contract factory
         const testMultiCall_factory = new ethers.ContractFactory(
@@ -29,10 +29,12 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
             ownerSigner
         );
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying MultiCall smart contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying MultiCall smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const testMultiCall_contract = await testMultiCall_factory.deploy();
@@ -50,15 +52,15 @@ describe("MultiCall contract deployment & tests on zkEVM", async () => {
         );
         multiCallContract = new Contract(multiCall_contract.address, MultiCall_artifacts.abi, zkEVM_provider);
 
-        console.log("\nTestMultiCall contract deployed at: ", testMultiCallContract.address);
-        console.log("MultiCall contract deployed at: ", multiCallContract.address);
+        console.log("TestMultiCall Contract Deployed at: ", testMultiCallContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${testMultiCallContract.address}`
         );
+        console.log("\n");
+        console.log("MultiCall Contract Deployed at: ", multiCallContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${multiCallContract.address}`
         );
-        console.log("\n");
     });
 
     describe("MultiCall contract functionalities tests", async () => {

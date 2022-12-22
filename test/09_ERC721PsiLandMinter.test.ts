@@ -17,15 +17,17 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\nAUTOMATE UNIT TEST CASES FOR Batch Minting using ERC721Psi TOKEN\n");
+        // console.log("\nAUTOMATE UNIT TEST CASES FOR Batch Minting using ERC721Psi TOKEN\n");
 
         // get the contract factory
         const erc721PsiContractFactory = new ethers.ContractFactory(abi, bytecode, ownerSigner);
 
-        console.log("Checking if wallet addresses have any balance....");
+        // console.log("Checking if wallet addresses have any balance....");
         await checkBalances(derivedNode);
 
-        console.log("\nDeploying ERC721psi Token smart contract on zkEVM chain....");
+        console.log("\n-----------------------------------------------------------------------------");
+        console.log("Deploying ERC721psi Token smart contract on zkEVM chain....");
+        console.log("-----------------------------------------------------------------------------\n");
 
         // deploy the contract
         const erc721PsiToken = await erc721PsiContractFactory.deploy();
@@ -36,14 +38,13 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
         // get the instance of the deployed contract
         erc721PsiTokenContract = new Contract(erc721PsiToken.address, abi, zkEVM_provider);
 
-        console.log("\nERC721Psi Token contract deployed at: ", erc721PsiTokenContract.address);
+        console.log("ERC721Psi Token Contract Deployed at: ", erc721PsiTokenContract.address);
         console.log(
             `Contract Details: https://explorer.public.zkevm-test.net/address/${erc721PsiTokenContract.address}`
         );
-        console.log("\n");
     });
 
-    describe("ERC721Psi Token functionalities tests", async () => {
+    describe("ERC721Psi token functionalities tests", async () => {
         it("...has correct token name", async () => {
             expect(await erc721PsiTokenContract.name()).eq("Batch Mint Test");
         });
@@ -56,7 +57,7 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
             const setAdminTx = await erc721PsiTokenContract
                 .connect(ownerSigner)
                 .setAdmin(adminSigner.getAddress(), "true");
-            await setAdminTx.wait(1);
+            await setAdminTx.wait();
             expect(await erc721PsiTokenContract.isAdmin(adminSigner.getAddress())).eq(true);
         });
 
@@ -64,31 +65,31 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
             const setBaseUriTx = await erc721PsiTokenContract
                 .connect(adminSigner)
                 .setBaseURI("ipfs://some-random-hash/");
-            await setBaseUriTx.wait(1);
+            await setBaseUriTx.wait();
             expect(await erc721PsiTokenContract.getBaseURI()).eq("ipfs://some-random-hash/");
         });
 
         it("...should allow owner to batch mint 10 ERC721psi tokens", async () => {
             const batchMintTokensTx = await erc721PsiTokenContract.connect(ownerSigner).batchMintTokens(10);
-            await batchMintTokensTx.wait(1);
+            await batchMintTokensTx.wait();
             expect(await erc721PsiTokenContract.balanceOf(ownerSigner.getAddress())).eq("10");
         });
 
         it("...should allow admin to batch mint 10 ERC721psi tokens", async () => {
             const batchMintTokensTx = await erc721PsiTokenContract.connect(adminSigner).batchMintTokens(10);
-            await batchMintTokensTx.wait(1);
+            await batchMintTokensTx.wait();
             expect(await erc721PsiTokenContract.balanceOf(adminSigner.getAddress())).eq("10");
         });
 
         it("...should allow owner to batch mint 100 ERC721psi tokens", async () => {
             const batchMintTokensTx = await erc721PsiTokenContract.connect(ownerSigner).batchMintTokens(100);
-            await batchMintTokensTx.wait(1);
+            await batchMintTokensTx.wait();
             expect(await erc721PsiTokenContract.balanceOf(ownerSigner.getAddress())).eq("110");
         });
 
         it("...should allow admin to batch mint 100 ERC721psi tokens", async () => {
             const batchMintTokensTx = await erc721PsiTokenContract.connect(adminSigner).batchMintTokens(100);
-            await batchMintTokensTx.wait(1);
+            await batchMintTokensTx.wait();
             expect(await erc721PsiTokenContract.balanceOf(adminSigner.getAddress())).eq("110");
         });
 
@@ -103,33 +104,33 @@ describe("ERC721Psi Token deployment & tests on zkEVM", async () => {
             const transferFromTx = await erc721PsiTokenContract
                 .connect(ownerSigner)
                 .transferFrom(ownerSigner.getAddress(), userSigner.getAddress(), 0);
-            await transferFromTx.wait(1);
+            await transferFromTx.wait();
 
-            expect(await erc721PsiTokenContract.ownerOf(0)).eq(userSigner.getAddress());
+            expect(await erc721PsiTokenContract.ownerOf(0)).eq(await userSigner.getAddress());
         });
 
         it("...should allow admin to transfer the ERC721Psi tokens", async () => {
             const transferFromTx = await erc721PsiTokenContract
                 .connect(adminSigner)
                 .transferFrom(adminSigner.getAddress(), userSigner.getAddress(), 10);
-            await transferFromTx.wait(1);
+            await transferFromTx.wait();
 
-            expect(await erc721PsiTokenContract.ownerOf(10)).eq(userSigner.getAddress());
+            expect(await erc721PsiTokenContract.ownerOf(10)).eq(await userSigner.getAddress());
         });
 
         it("...should allow user to transfer the ERC721Psi token", async () => {
             const transferFromTx = await erc721PsiTokenContract
                 .connect(userSigner)
                 .transferFrom(userSigner.getAddress(), ownerSigner.getAddress(), 0);
-            await transferFromTx.wait(1);
+            await transferFromTx.wait();
 
             const transferFromTx_2 = await erc721PsiTokenContract
                 .connect(userSigner)
                 .transferFrom(userSigner.getAddress(), adminSigner.getAddress(), 10);
-            await transferFromTx_2.wait(1);
+            await transferFromTx_2.wait();
 
-            expect(await erc721PsiTokenContract.ownerOf(0)).eq(ownerSigner.getAddress());
-            expect(await erc721PsiTokenContract.ownerOf(10)).eq(adminSigner.getAddress());
+            expect(await erc721PsiTokenContract.ownerOf(0)).eq(await ownerSigner.getAddress());
+            expect(await erc721PsiTokenContract.ownerOf(10)).eq(await adminSigner.getAddress());
         });
     });
 });

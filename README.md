@@ -1,4 +1,4 @@
-# AUTOMATED TEST FOR ZKEVM SMART CONTRACTS
+# AUTOMATED UNIT TEST CASE OF VARIOUS SMART CONTRACTS ON ZKEVM
 
 This repository contains all the necessary unit test scripts using Mocha for zkEVM smart contracts.
 

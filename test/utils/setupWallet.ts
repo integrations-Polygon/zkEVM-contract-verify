@@ -18,7 +18,10 @@ const setupWallet = async () => {
         for (let i = 0; i < 5; i++) {
             derivedNodeArray[i] = HDNode.derivePath(`m/44'/60'/0'/0/${i}`);
         }
-        bobPrivateKey = derivedNodeArray[4].privateKey;
+
+        // get bob's private key
+        const bobPrivateKey_temp = derivedNodeArray[4].privateKey;
+        bobPrivateKey = bobPrivateKey_temp.replace("0x", "");
 
         ownerSigner = new ethers.Wallet(derivedNodeArray[0].privateKey, zkEVM_provider);
         adminSigner = new ethers.Wallet(derivedNodeArray[1].privateKey, zkEVM_provider);
@@ -31,8 +34,6 @@ const setupWallet = async () => {
         console.log("error while setting up wallets: ", error);
     }
 };
-
-setupWallet();
 
 export {
     setupWallet,

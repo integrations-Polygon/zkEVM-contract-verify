@@ -15,9 +15,9 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
     // setup atleast 5 wallet addresses for testing
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying Fallback smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -53,7 +53,7 @@ describe("Interface contract deployment & tests on zkEVM", async () => {
     describe("Interface contract functionalities tests", async () => {
         it("...can increment value", async () => {
             const tx = await myContract.connect(ownerSigner).incrementCounter(counter.address);
-            await tx.wait();
+            await tx.wait(2);
             expect(await myContract.getCount(counter.address)).eq("1");
         });
     });

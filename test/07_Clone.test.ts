@@ -20,9 +20,9 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying Clone smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -96,7 +96,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const setService = await assetFactoryContract
                 .connect(ownerSigner)
                 .setNFTContract(nftAssetContract.address);
-            await setService.wait();
+            await setService.wait(2);
             expect(await assetFactoryContract.nftContract()).eq(nftAssetContract.address);
         });
 
@@ -108,7 +108,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const setService = await assetFactoryContract
                 .connect(ownerSigner)
                 .setService(ownerSigner.getAddress());
-            await setService.wait();
+            await setService.wait(2);
             expect(await assetFactoryContract.service()).eq(await ownerSigner.getAddress());
         });
 
@@ -116,7 +116,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const cloneContract = await assetFactoryContract
                 .connect(ownerSigner)
                 .cloneNFTContract(orgId, collectionId, nftName, nftSymbol);
-            await cloneContract.wait();
+            await cloneContract.wait(2);
             cloneInstanceCreate = await assetFactoryContract.cloneInstance();
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate,
@@ -143,7 +143,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
                 zkEVM_provider
             );
             const setBaseURI = await instanceContract.connect(ownerSigner).setBaseURI(baseURI);
-            await setBaseURI.wait();
+            await setBaseURI.wait(2);
             expect(await instanceContract.baseURI()).eq(baseURI);
         });
     });
@@ -158,7 +158,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const setService = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .setNFTContract(nftAssetContract.address);
-            await setService.wait();
+            await setService.wait(2);
             expect(await assetFactoryContractCreate2.nftContract()).eq(nftAssetContract.address);
         });
 
@@ -170,7 +170,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const setService = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .setService(ownerSigner.getAddress());
-            await setService.wait();
+            await setService.wait(2);
             expect(await assetFactoryContractCreate2.service()).eq(await ownerSigner.getAddress());
         });
 
@@ -178,7 +178,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
             const cloneContract = await assetFactoryContractCreate2
                 .connect(ownerSigner)
                 .cloneNFTContract(orgId, collectionId, nftName, nftSymbol);
-            await cloneContract.wait();
+            await cloneContract.wait(2);
             cloneInstanceCreate2 = await assetFactoryContractCreate2.cloneInstance();
             const instanceContract = new ethers.Contract(
                 cloneInstanceCreate2,
@@ -205,7 +205,7 @@ describe("Clone contract deployment & tests on zkEVM", async () => {
                 zkEVM_provider
             );
             const setBaseURI = await instanceContract.connect(ownerSigner).setBaseURI(baseURI);
-            await setBaseURI.wait();
+            await setBaseURI.wait(2);
             expect(await instanceContract.baseURI()).eq(baseURI);
         });
     });

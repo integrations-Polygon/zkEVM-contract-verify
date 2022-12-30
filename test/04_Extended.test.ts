@@ -14,9 +14,9 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying Extended smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -48,7 +48,7 @@ describe("Extended contract deployment & tests on zkEVM", async () => {
             const role = await extendedContract.ROLE();
             const address = await ownerSigner.getAddress();
             const tx = await extendedContract.connect(ownerSigner).revokeRole(role, address);
-            await tx.wait();
+            await tx.wait(2);
             expect(await extendedContract.isOverride()).eq(true);
         });
     });

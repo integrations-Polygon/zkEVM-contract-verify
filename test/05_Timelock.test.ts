@@ -17,9 +17,9 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying Timelock smart contract and testTimelock contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -64,7 +64,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             `Contract Details: https://explorer.public.zkevm-test.net/address/${testTimelockContract.address}`
         );
 
-        // get block.timestamp + 20
+        // get block.timestamp
         timestamp = await testTimelockContract.getTimestamp();
     });
 
@@ -125,7 +125,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             const executeTx = await timelockContract
                 .connect(ownerSigner)
                 .execute(testTimelockContract.address, 0, "test()", 0x00, timestamp);
-            await executeTx.wait(1);
+            await executeTx.wait(2);
 
             // get txId
             const txId = await timelockContract.getTxId(

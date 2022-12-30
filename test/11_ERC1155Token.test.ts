@@ -21,9 +21,9 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying ERC1155 Token smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -55,7 +55,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             const setAdminTx = await erc1155TokenContract
                 .connect(ownerSigner)
                 .setAdmin(adminSigner.getAddress(), "true");
-            await setAdminTx.wait();
+            await setAdminTx.wait(2);
 
             expect(await erc1155TokenContract.isAdmin(adminSigner.getAddress())).eq(true);
         });
@@ -64,7 +64,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             const mintTx = await erc1155TokenContract
                 .connect(ownerSigner)
                 .mintTestERC1155(ownerSigner.getAddress(), ethers.utils.parseEther("5"));
-            await mintTx.wait();
+            await mintTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(ownerSigner.getAddress(), 1)).eq(
                 ethers.utils.parseEther("5")
@@ -75,7 +75,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             const batchMintTx = await erc1155TokenContract
                 .connect(ownerSigner)
                 .mintBatchTestERC1155(ownerSigner.getAddress(), [1, 20, 5, 1, 10, 1, 22, 4, 1, 50]);
-            await batchMintTx.wait();
+            await batchMintTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(ownerSigner.getAddress(), 2)).eq(1);
             expect(await erc1155TokenContract.balanceOf(ownerSigner.getAddress(), 11)).eq(50);
@@ -85,7 +85,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             const batchMintTx = await erc1155TokenContract
                 .connect(adminSigner)
                 .mintBatchTestERC1155(adminSigner.getAddress(), [1, 20, 5, 1, 10, 1, 22, 4, 1, 50]);
-            await batchMintTx.wait();
+            await batchMintTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(adminSigner.getAddress(), 12)).eq(1);
             expect(await erc1155TokenContract.balanceOf(adminSigner.getAddress(), 21)).eq(50);
@@ -101,7 +101,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
                     ethers.utils.parseEther("5"),
                     "0x00"
                 );
-            await safeTransferFromTx.wait();
+            await safeTransferFromTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(userSigner.getAddress(), 1)).eq(
                 ethers.utils.parseEther("5")
@@ -123,7 +123,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
                     [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
                     "0x00"
                 );
-            await safeBatchTransferFromTx.wait();
+            await safeBatchTransferFromTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(userSigner.getAddress(), 2)).eq(1);
             expect(await erc1155TokenContract.balanceOf(userSigner.getAddress(), 11)).eq(50);
@@ -139,7 +139,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
                     ethers.utils.parseEther("5"),
                     "0x00"
                 );
-            await safeTransferFromTx.wait();
+            await safeTransferFromTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(aliceSigner.getAddress(), 1)).eq(
                 ethers.utils.parseEther("5")
@@ -161,7 +161,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
                     [1, 20, 5, 1, 10, 1, 22, 4, 1, 50],
                     "0x00"
                 );
-            await safeBatchTransferFromTx.wait();
+            await safeBatchTransferFromTx.wait(2);
 
             expect(await erc1155TokenContract.balanceOf(aliceSigner.getAddress(), 2)).eq(1);
             expect(await erc1155TokenContract.balanceOf(aliceSigner.getAddress(), 11)).eq(50);
@@ -171,7 +171,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
             const transferOwnershipTx = await erc1155TokenContract
                 .connect(ownerSigner)
                 .transferOwnership(adminSigner.getAddress());
-            await transferOwnershipTx.wait();
+            await transferOwnershipTx.wait(2);
 
             expect(await erc1155TokenContract.owner()).eq(await adminSigner.getAddress());
         });
@@ -183,7 +183,7 @@ describe("ERC1155 Token deployment & tests on zkEVM", async () => {
 
         it("...should allow owner to renounce ownership", async () => {
             const renounceOwnershipTx = await erc1155TokenContract.connect(adminSigner).renounceOwnership();
-            await renounceOwnershipTx.wait();
+            await renounceOwnershipTx.wait(2);
 
             expect(await erc1155TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
         });

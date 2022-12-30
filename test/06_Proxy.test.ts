@@ -16,9 +16,9 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
 
     const derivedNode = await setupWallet();
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying Proxy smart contract & its Implementation on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -58,7 +58,7 @@ describe("Proxy contract deployment & tests on zkEVM", async () => {
 
         it("...can write function", async () => {
             const tx = await writeAsProxy.connect(ownerSigner).setUint("10");
-            await tx.wait();
+            await tx.wait(2);
             expect(await proxyContract.getUint()).to.equal("10");
         });
     });

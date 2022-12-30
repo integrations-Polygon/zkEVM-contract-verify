@@ -23,9 +23,9 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying MultiSig Wallet smart contract and erc20 token on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -77,7 +77,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const transferOwnershipTx = await erc20Contract
                 .connect(ownerSigner)
                 .transferOwnership(multiSigWalletContract.address);
-            await transferOwnershipTx.wait();
+            await transferOwnershipTx.wait(2);
             expect(await erc20Contract.owner()).eq(multiSigWalletContract.address);
         });
 
@@ -85,7 +85,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const transferTx = await erc20Contract
                 .connect(ownerSigner)
                 .transfer(multiSigWalletContract.address, BigNumber.from("1000000000"));
-            await transferTx.wait();
+            await transferTx.wait(2);
             expect(await erc20Contract.balanceOf(multiSigWalletContract.address)).eq(
                 BigNumber.from("1000000000")
             );
@@ -111,7 +111,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
                 .connect(ownerSigner)
                 .submitTransaction(erc20Contract.address, 0, data);
 
-            await submitTransactionTx.wait();
+            await submitTransactionTx.wait(2);
 
             expect(await multiSigWalletContract.getTransactionCount()).eq(1);
         });
@@ -128,17 +128,17 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const ownerConfirmationTx = await multiSigWalletContract
                 .connect(ownerSigner)
                 .confirmTransaction(0);
-            await ownerConfirmationTx.wait();
+            await ownerConfirmationTx.wait(2);
             expect(await multiSigWalletContract.isConfirmed(0, ownerSigner.getAddress())).to.be.true;
 
             const adminConfirmationTx = await multiSigWalletContract
                 .connect(adminSigner)
                 .confirmTransaction(0);
-            await adminConfirmationTx.wait();
+            await adminConfirmationTx.wait(2);
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).to.be.true;
 
             const userConfirmationTx = await multiSigWalletContract.connect(userSigner).confirmTransaction(0);
-            await userConfirmationTx.wait();
+            await userConfirmationTx.wait(2);
             expect(await multiSigWalletContract.isConfirmed(0, userSigner.getAddress())).to.be.true;
 
             expect(await (await multiSigWalletContract.getTransaction(0)).numConfirmations).eq(
@@ -161,12 +161,12 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
             const revokeConfirmationTx = await multiSigWalletContract
                 .connect(adminSigner)
                 .revokeConfirmation(0);
-            await revokeConfirmationTx.wait();
+            await revokeConfirmationTx.wait(2);
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(false);
 
             // REVERT REVOKE CONFIRMATION
             const confirmationTx = await multiSigWalletContract.connect(adminSigner).confirmTransaction(0);
-            await confirmationTx.wait();
+            await confirmationTx.wait(2);
             expect(await multiSigWalletContract.isConfirmed(0, adminSigner.getAddress())).eq(true);
         });
 
@@ -184,7 +184,7 @@ describe("MultiSig Wallet deployment & tests on zkEVM", async () => {
 
         it("...should pass check for owners can execute transaction", async () => {
             const executeTx = await multiSigWalletContract.connect(ownerSigner).executeTransaction(0);
-            await executeTx.wait();
+            await executeTx.wait(2);
 
             expect(await (await multiSigWalletContract.getTransaction(0)).executed).to.be.true;
         });

@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 
 contract TestTimelock {
     using Address for address;
+    uint256 count = 0;
 
     address public timelock;
 
@@ -15,6 +16,7 @@ contract TestTimelock {
 
     function test() external {
         require(msg.sender == timelock, "caller is not the timelock smart contract");
+        count++;
         // more code here such as
         // - upgrade contract
         // - transfer funds

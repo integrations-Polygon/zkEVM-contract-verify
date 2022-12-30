@@ -17,9 +17,9 @@ describe("ABI Encode Decode contract deployment & tests on zkEVM", async () => {
 
     before(async () => {
         console.log("DEPLOYING ALL UNIT TEST SMART CONTRACTS ON-CHAIN\n");
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying ABI encode decode smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);

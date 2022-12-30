@@ -21,9 +21,9 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying ERC20 token smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -65,7 +65,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const mintTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .mintERC20(aliceSigner.getAddress(), ethers.utils.parseEther("10"));
-            await mintTx.wait();
+            await mintTx.wait(2);
             expect(await erc20TokenContract.balanceOf(aliceSigner.getAddress())).eq(
                 ethers.utils.parseEther("10")
             );
@@ -75,7 +75,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const transferTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .transfer(adminSigner.getAddress(), ethers.utils.parseEther("1"));
-            await transferTx.wait();
+            await transferTx.wait(2);
             expect(await erc20TokenContract.balanceOf(adminSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
             );
@@ -97,7 +97,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const approveTx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(userSigner.getAddress(), ethers.utils.parseEther("1"));
-            await approveTx.wait();
+            await approveTx.wait(2);
 
             expect(await erc20TokenContract.allowance(ownerSigner.getAddress(), userSigner.getAddress())).eq(
                 ethers.utils.parseEther("1")
@@ -108,7 +108,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const transferTx = await erc20TokenContract
                 .connect(userSigner)
                 .transferFrom(ownerSigner.getAddress(), userSigner.getAddress(), 1000);
-            await transferTx.wait();
+            await transferTx.wait(2);
 
             expect(await erc20TokenContract.balanceOf(userSigner.getAddress())).eq(1000);
         });
@@ -117,7 +117,7 @@ describe("ERC20 token deployment & tests on zkEVM", async () => {
             const tx = await erc20TokenContract
                 .connect(ownerSigner)
                 .approve(aliceSigner.getAddress(), ethers.utils.parseEther("1"));
-            await tx.wait();
+            await tx.wait(2);
             await expect(
                 erc20TokenContract
                     .connect(aliceSigner)

@@ -24,7 +24,7 @@ const getBalances = async (derivedNode) => {
 
 const checkBalances = async (derivedNode) => {
     try {
-        console.log("Checking if wallet addresses have any balance....");
+        console.log("Checking if wallet addresses have minimum balance for deployment....");
         await getBalances(derivedNode);
         for (let i = 0; i < balance.length; i++) {
             if (balance[i] == 0) {

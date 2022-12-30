@@ -14,9 +14,9 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying ERC721 tokens smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         // check & display current balances
         await checkBalances(derivedNode);
@@ -52,7 +52,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const setAdminTx = await erc721TokenContract
                 .connect(ownerSigner)
                 .setAdmin(adminSigner.getAddress(), "true");
-            await setAdminTx.wait();
+            await setAdminTx.wait(2);
             expect(await erc721TokenContract.isAdmin(adminSigner.getAddress())).eq(true);
         });
 
@@ -60,7 +60,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const mintTx = await erc721TokenContract
                 .connect(ownerSigner)
                 .issueToken(ownerSigner.getAddress(), "some-random-hash-1");
-            await mintTx.wait();
+            await mintTx.wait(2);
             expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("1");
         });
 
@@ -68,7 +68,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const mintTx = await erc721TokenContract
                 .connect(adminSigner)
                 .issueToken(adminSigner.getAddress(), "some-random-hash-2");
-            await mintTx.wait();
+            await mintTx.wait(2);
             expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("1");
         });
 
@@ -87,7 +87,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
                     "some-random-hash-11",
                     "some-random-hash-12",
                 ]);
-            await batchMintTx.wait();
+            await batchMintTx.wait(2);
             expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("11");
         });
 
@@ -106,7 +106,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
                     "some-random-hash-21",
                     "some-random-hash-22",
                 ]);
-            await batchMintTx.wait();
+            await batchMintTx.wait(2);
             expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("11");
         });
 
@@ -117,14 +117,14 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
 
         it("...should allow owner to burn ERC721 tokens", async () => {
             const burnTx = await erc721TokenContract.connect(ownerSigner).burn(1);
-            await burnTx.wait();
+            await burnTx.wait(2);
 
             expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("10");
         });
 
         it("...should allow admin to burn ERC721 tokens", async () => {
             const burnTx = await erc721TokenContract.connect(adminSigner).burn(2);
-            await burnTx.wait();
+            await burnTx.wait(2);
 
             expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("10");
         });
@@ -133,7 +133,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const transferTx = await erc721TokenContract
                 .connect(ownerSigner)
                 .transferFrom(ownerSigner.getAddress(), adminSigner.getAddress(), "3");
-            await transferTx.wait();
+            await transferTx.wait(2);
 
             expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("9");
             expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("11");
@@ -143,7 +143,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const approvalTx = await erc721TokenContract
                 .connect(ownerSigner)
                 .setApprovalForAll(adminSigner.getAddress(), true);
-            await approvalTx.wait();
+            await approvalTx.wait(2);
             expect(
                 await erc721TokenContract.isApprovedForAll(ownerSigner.getAddress(), adminSigner.getAddress())
             ).eq(true);
@@ -151,7 +151,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const transferTx = await erc721TokenContract
                 .connect(adminSigner)
                 .transferFrom(ownerSigner.getAddress(), adminSigner.getAddress(), 4);
-            await transferTx.wait();
+            await transferTx.wait(2);
 
             expect(await erc721TokenContract.balanceOf(ownerSigner.getAddress())).eq("8");
             expect(await erc721TokenContract.balanceOf(adminSigner.getAddress())).eq("12");
@@ -161,7 +161,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
             const transferOwnershipTx = await erc721TokenContract
                 .connect(ownerSigner)
                 .transferOwnership(adminSigner.getAddress());
-            await transferOwnershipTx.wait();
+            await transferOwnershipTx.wait(2);
 
             expect(await erc721TokenContract.owner()).eq(await adminSigner.getAddress());
         });
@@ -173,7 +173,7 @@ describe("ERC721 tokens deployment & tests on zkEVM", async () => {
 
         it("...should allow owner to renounce ownership", async () => {
             const renounceOwnershipTx = await erc721TokenContract.connect(adminSigner).renounceOwnership();
-            await renounceOwnershipTx.wait();
+            await renounceOwnershipTx.wait(2);
 
             expect(await erc721TokenContract.owner()).eq("0x0000000000000000000000000000000000000000");
         });

@@ -28,9 +28,9 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
     const derivedNode = await setupWallet();
 
     before(async () => {
-        console.log("\n-----------------------------------------------------------------------------");
+        console.log("\n-----------------------------------------------------------------------------------");
         console.log("Deploying NFTLend smart contract on zkEVM chain....");
-        console.log("-----------------------------------------------------------------------------\n");
+        console.log("-----------------------------------------------------------------------------------\n");
 
         /* 
             check & display current balances
@@ -122,7 +122,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const transferToken_alice = await tokenContract
                 .connect(ownerSigner)
                 .transfer(aliceSigner.getAddress(), "10000");
-            await transferToken_alice.wait();
+            await transferToken_alice.wait(2);
             expect(await tokenContract.balanceOf(await aliceSigner.getAddress())).eq("10000");
         });
 
@@ -130,7 +130,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const transferToken_bob = await tokenContract
                 .connect(ownerSigner)
                 .transfer(bobSigner.getAddress(), "10000");
-            await transferToken_bob.wait();
+            await transferToken_bob.wait(2);
             expect(await tokenContract.balanceOf(await bobSigner.getAddress())).eq("10000");
         });
 
@@ -138,7 +138,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const transferToken_lendContract = await tokenContract
                 .connect(ownerSigner)
                 .transfer(lendContract.address, "10000");
-            await transferToken_lendContract.wait();
+            await transferToken_lendContract.wait(2);
             expect(await tokenContract.balanceOf(lendContract.address)).eq("10000");
         });
 
@@ -146,7 +146,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_owner = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(ownerSigner.getAddress());
-            await whitelist_owner.wait();
+            await whitelist_owner.wait(2);
             expect(await nftContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
         });
 
@@ -154,7 +154,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_alice = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(aliceSigner.getAddress());
-            await whitelist_alice.wait();
+            await whitelist_alice.wait(2);
             expect(await nftContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
         });
 
@@ -162,7 +162,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_bob = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(bobSigner.getAddress());
-            await whitelist_bob.wait();
+            await whitelist_bob.wait(2);
             expect(await nftContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
         });
 
@@ -170,7 +170,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_lendContract = await nftContract
                 .connect(ownerSigner)
                 .addToWhitelist(lendContract.address);
-            await whitelist_lendContract.wait();
+            await whitelist_lendContract.wait(2);
             expect(await nftContract.checkWhitelist(lendContract.address)).eq(true);
         });
 
@@ -178,7 +178,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_owner = await nftLendContract
                 .connect(ownerSigner)
                 .addToWhitelist(ownerSigner.getAddress());
-            await whitelist_owner.wait();
+            await whitelist_owner.wait(2);
             expect(await nftLendContract.checkWhitelist(await ownerSigner.getAddress())).eq(true);
         });
 
@@ -186,7 +186,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_alice = await nftLendContract
                 .connect(ownerSigner)
                 .addToWhitelist(aliceSigner.getAddress());
-            await whitelist_alice.wait();
+            await whitelist_alice.wait(2);
             expect(await nftLendContract.checkWhitelist(await aliceSigner.getAddress())).eq(true);
         });
 
@@ -194,7 +194,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_bob = await nftLendContract
                 .connect(ownerSigner)
                 .addToWhitelist(bobSigner.getAddress());
-            await whitelist_bob.wait();
+            await whitelist_bob.wait(2);
             expect(await nftLendContract.checkWhitelist(await bobSigner.getAddress())).eq(true);
         });
 
@@ -202,7 +202,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const whitelist_lendContract = await nftLendContract
                 .connect(ownerSigner)
                 .addToWhitelist(lendContract.address);
-            await whitelist_lendContract.wait();
+            await whitelist_lendContract.wait(2);
             expect(await nftLendContract.checkWhitelist(lendContract.address)).eq(true);
         });
 
@@ -210,7 +210,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const issueToken_1 = await nftContract
                 .connect(ownerSigner)
                 .issueToken(aliceSigner.getAddress(), 1, `hash-01`);
-            await issueToken_1.wait();
+            await issueToken_1.wait(2);
             expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
         });
 
@@ -218,7 +218,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const issueToken_2 = await nftContract
                 .connect(ownerSigner)
                 .issueToken(aliceSigner.getAddress(), 2, `hash-02`);
-            await issueToken_2.wait();
+            await issueToken_2.wait(2);
             expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
         });
 
@@ -226,7 +226,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const issueToken_3 = await nftContract
                 .connect(ownerSigner)
                 .issueToken(aliceSigner.getAddress(), 3, `hash-03`);
-            await issueToken_3.wait();
+            await issueToken_3.wait(2);
             expect(await nftContract.ownerOf(1)).eq(await aliceSigner.getAddress());
         });
 
@@ -234,7 +234,7 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
             const setLender = await nftLendContract
                 .connect(ownerSigner)
                 .setLenderContractAddress(lendContract.address);
-            await setLender.wait();
+            await setLender.wait(2);
             expect(await nftLendContract.connect(ownerSigner).getLenderContractAddress()).eq(
                 lendContract.address
             );
@@ -254,19 +254,19 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
 
         it("...should allow lender to list NFT for lending", async () => {
             const approveResult = await nftContract.connect(aliceSigner).approve(lendContract.address, 1);
-            await approveResult.wait();
+            await approveResult.wait(2);
 
             const saleResult = await lendContract.connect(aliceSigner).lendNft([1], 1000, 50, 100);
-            await saleResult.wait();
+            await saleResult.wait(2);
             expect(await nftContract.ownerOf(1)).eq(lendContract.address);
         });
 
         it("...should allow renter to Rent NFT", async () => {
             let approveResult2 = await tokenContract.connect(bobSigner).approve(lendContract.address, 1000);
-            await approveResult2.wait();
+            await approveResult2.wait(2);
 
             let purchaseResult = await lendContract.connect(bobSigner).rentNft(1);
-            await purchaseResult.wait();
+            await purchaseResult.wait(2);
             expect(await nftLendContract.ownerOf(1)).to.eq(await bobSigner.getAddress());
         });
 
@@ -296,32 +296,32 @@ describe("NFTLend contract deployment & tests on zkEVM", async () => {
 
         it("...should allow lender to cancel Lend", async () => {
             const approveResult = await nftContract.connect(aliceSigner).approve(lendContract.address, 2);
-            await approveResult.wait();
+            await approveResult.wait(2);
 
             const saleResult = await lendContract.connect(aliceSigner).lendNft([2], 1000, 1000, 100);
-            await saleResult.wait();
+            await saleResult.wait(2);
             expect(await nftContract.ownerOf(2)).to.eq(lendContract.address);
 
             const cancelledResult = await lendContract.connect(aliceSigner).cancelLendNft(2);
-            await cancelledResult.wait();
+            await cancelledResult.wait(2);
             expect(await nftContract.ownerOf(2)).to.eq(await aliceSigner.getAddress());
         });
 
         it("...should not allow lender to claim NFT before its duration (1000000) is over", async () => {
             const approveResult = await nftContract.connect(aliceSigner).approve(lendContract.address, 3);
-            await approveResult.wait();
+            await approveResult.wait(2);
 
             const saleResult = await lendContract.connect(aliceSigner).lendNft([3], 1000, 1000000, 100);
-            await saleResult.wait();
+            await saleResult.wait(2);
             expect(await nftContract.ownerOf(3)).to.eq(lendContract.address);
 
             const approveResult2 = await tokenContract
                 .connect(aliceSigner)
                 .approve(lendContract.address, 1000);
-            await approveResult2.wait();
+            await approveResult2.wait(2);
 
             const purchaseResult = await lendContract.connect(aliceSigner).rentNft(3);
-            await purchaseResult.wait();
+            await purchaseResult.wait(2);
             expect(await nftLendContract.ownerOf(3)).to.eq(await aliceSigner.getAddress());
 
             await expect(lendContract.connect(aliceSigner).claimNft(3)).to.be.revertedWith(

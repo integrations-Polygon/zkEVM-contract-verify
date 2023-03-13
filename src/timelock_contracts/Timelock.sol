@@ -39,7 +39,7 @@ contract Timelock {
         address _target,
         uint _value,
         string calldata _func,
-        bytes calldata _data,
+        bytes memory _data,
         uint _timestamp
     ) public pure returns (bytes32) {
         return keccak256(abi.encode(_target, _value, _func, _data, _timestamp));
@@ -49,14 +49,14 @@ contract Timelock {
      * @param _target Address of contract or account to call
      * @param _value Amount of ETH to send
      * @param _func Function signature, for example "foo(address,uint256)"
-     * @param _data ABI encoded data send.
+     * @param _data abiEncodeWithSig value for test() function.
      * @param _timestamp Timestamp after which the transaction can be executed.
      */
     function queue(
         address _target,
         uint _value,
         string calldata _func,
-        bytes calldata _data,
+        bytes memory _data,
         uint _timestamp
     ) external onlyOwner returns (bytes32 txId) {
         txId = getTxId(_target, _value, _func, _data, _timestamp);
@@ -65,6 +65,8 @@ contract Timelock {
         }
         // ---|------------|---------------|-------
         //  block    block + min     block + max
+        // require(_timestamp < block.timestamp + MIN_DELAY, "err1");
+        // require(_timestamp > block.timestamp + MAX_DELAY, "err2");
         if (_timestamp < block.timestamp + MIN_DELAY || _timestamp > block.timestamp + MAX_DELAY) {
             revert TimestampNotInRangeError(block.timestamp, _timestamp);
         }
@@ -72,13 +74,14 @@ contract Timelock {
         queued[txId] = true;
 
         emit Queue(txId, _target, _value, _func, _data, _timestamp);
+        return txId;
     }
 
     function execute(
         address _target,
         uint _value,
         string calldata _func,
-        bytes calldata _data,
+        bytes memory _data,
         uint _timestamp
     ) external payable onlyOwner returns (bytes memory) {
         bytes32 txId = getTxId(_target, _value, _func, _data, _timestamp);
@@ -96,25 +99,17 @@ contract Timelock {
 
         queued[txId] = false;
 
-        // prepare data
-        bytes memory data;
-        if (bytes(_func).length > 0) {
-            // data = func selector + _data
-            data = abi.encodePacked(bytes4(keccak256(bytes(_func))), _data);
-        } else {
-            // call fallback with data
-            data = _data;
-        }
-
         // call target
-        (bool ok, bytes memory res) = _target.call{ value: _value }(data);
-        if (!ok) {
-            revert TxFailedError();
-        }
+        (bool success, bytes memory res) = _target.call{ value: _value }(_data);
+        require(success, "tx failed");
 
         emit Execute(txId, _target, _value, _func, _data, _timestamp);
 
         return res;
+    }
+
+    function getTestData(uint256 _input) external pure returns (bytes memory) {
+        return abi.encodeWithSignature("test(uint256)", _input);
     }
 
     function cancel(bytes32 _txId) external onlyOwner {

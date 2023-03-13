@@ -64,8 +64,9 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             `Contract Details: https://explorer.public.zkevm-test.net/address/${testTimelockContract.address}`
         );
 
+        const extendedSeconds = 60;
         // get block.timestamp
-        timestamp = await testTimelockContract.getTimestamp();
+        timestamp = (await testTimelockContract.getTimestamp()) + extendedSeconds;
     });
 
     describe("TestTimelock smart contract functionality tests", async () => {
@@ -105,7 +106,7 @@ describe("Timelock smart contract deployment & tests on zkEVM", async () => {
             expect(await timelockContract.queued(txId)).to.be.true;
         });
 
-        it("...should not be able to execute a queued transaction before its due time", async () => {
+        it("...should not be able to execute a queued transaction before its due time (60 sec)", async () => {
             await expect(
                 timelockContract
                     .connect(ownerSigner)

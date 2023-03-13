@@ -18,7 +18,7 @@ contract StakeToken is Pausable, Ownable, ReentrancyGuard {
     Token testToken;
 
     // 30 Days (30 * 24 * 60 * 60)
-    uint256 public planDuration = 60;
+    uint256 public planDuration = 60; // 60 seconds
 
     // 180 Days (180 * 24 * 60 * 60)
     uint256 _planExpired = 1699085859;

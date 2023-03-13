@@ -24,6 +24,6 @@ contract TestTimelock {
     }
 
     function getTimestamp() external view returns (uint256) {
-        return block.timestamp + 50;
+        return block.timestamp;
     }
 }

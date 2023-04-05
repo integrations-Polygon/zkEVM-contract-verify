@@ -1,27 +1,22 @@
 {
-  "name": "erc1155-token-zkevm",
+  "name": "diaoraclev2-zkevm-verify-test",
   "version": "1.0.0",
-  "description": "simple ERC1155 Token smart contract for zkEVM",
+  "description": "deploy and verify diaoraclev2 on zkEVM testnet",
   "scripts": {
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "deploy:ERC20": "npx hardhat run --network zkEVM scripts/ERC20/deploy_ERC20Token.ts",
-    "deploy:ERC721": "npx hardhat run --network zkEVM scripts/ERC721/deploy_ERC721Token.ts",
-    "deploy:ERC1155": "npx hardhat run --network zkEVM scripts/ERC1155/deploy_ERC1155Token.ts",
+    "deploy": "npx hardhat run --network zkEVM scripts/DIAOracleV2_deploy/DIAOracleV2_deploy.ts",
     "test": "hardhat test"
   },
-  "author": "Gulam Rasul Shah",
+  "author": "polygon-dev-support-team",
   "license": "MIT",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
-    "@nomiclabs/hardhat-etherscan": "^2.1.6",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "^7.1.0",
     "@typechain/hardhat": "^2.3.0",
-    "@types/chai": "^4.3.3",
-    "@types/mocha": "^10.0.0",
     "@types/node": "^16.9.6",
-    "chai": "^4.3.6",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.4",
     "hardhat": "^2.6.4",
@@ -36,10 +31,6 @@
     "*.{ts,json,sol,md,yml}": "prettier --write"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.7.3",
-    "@openzeppelin/contracts-upgradeable": "^4.7.3",
-    "dotenv": "^16.0.2",
-    "erc721psi": "^0.7.0",
-    "prompt-sync": "^4.2.0"
+    "dotenv": "^16.0.2"
   }
 }

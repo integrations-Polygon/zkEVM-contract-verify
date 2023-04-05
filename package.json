@@ -1,11 +1,13 @@
 {
-  "name": "diaoraclev2-zkevm-verify-test",
+  "name": "zkevm-contract-verify-test",
   "version": "1.0.0",
-  "description": "deploy and verify diaoraclev2 on zkEVM testnet",
+  "description": "This repository contains all the necessary steps to deploy and verify smart contracts on ZKEVM testnet by adding a custom chain in hardhat config etherscan obj and utilizing the blockscout block explorer API for contract verification.",
   "scripts": {
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run --network zkEVM scripts/DIAOracleV2_deploy/DIAOracleV2_deploy.ts",
+    "deploy:ERC20": "npx hardhat run --network zkEVM scripts/ERC20Token_deploy",
+    "deploy:ERC721": "npx hardhat run --network zkEVM scripts/ERC721Token_deploy",
+    "deploy:ERC1155": "npx hardhat run --network zkEVM scripts/ERC1155Token_deploy",
     "test": "hardhat test"
   },
   "author": "polygon-dev-support-team",
@@ -31,6 +33,7 @@
     "*.{ts,json,sol,md,yml}": "prettier --write"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.8.2",
     "dotenv": "^16.0.2"
   }
 }
